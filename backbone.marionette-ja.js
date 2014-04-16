@@ -47,7 +47,6 @@ Backbone.ChildViewContainer = (function(Backbone, _){
   // ## メソッド
   _.extend(Container.prototype, {
 
-    // ### Add
     // コンテナに対してビューを追加します。
     // 格納されたビューは`cid`が割り振られ、
     // モデルのcid(とモデル自身)によって検索できるようになります。
@@ -72,41 +71,35 @@ Backbone.ChildViewContainer = (function(Backbone, _){
       return this;
     },
 
-    // ### findByModel
     // 紐付けられたモデルでビューを検索し、取得します。
     // モデルの`cid`を検索に使用します。
     findByModel: function(model){
       return this.findByModelCid(model.cid);
     },
 
-    // ### findByModelCid
     // 紐付けられたモデルの`cid`でビューを検索し、取得します。
     findByModelCid: function(modelCid){
       var viewCid = this._indexByModel[modelCid];
       return this.findByCid(viewCid);
     },
 
-    // ### findByCustom
     // 独自のキーでビューを検索し、取得します。
     findByCustom: function(index){
       var viewCid = this._indexByCustom[index];
       return this.findByCid(viewCid);
     },
 
-    // ### findByIndex
     // インデックスでビューを検索し、ビューを取得します。
     // ただしインデックスは保証されていません。
     findByIndex: function(index){
       return _.values(this._views)[index];
     },
 
-    // ### findByCid
     // 直接`cid`で検索し、ビューを取得します。
     findByCid: function(cid){
       return this._views[cid];
     },
 
-    // ### remove
     // ビューを削除します
     remove: function(view){
       var viewCid = view.cid;
@@ -132,14 +125,12 @@ Backbone.ChildViewContainer = (function(Backbone, _){
       return this;
     },
 
-    // ### call
     // コンテナに格納されているビューに対してメソッドを実行します。
     // `function.call`のように、メソッドと引数を一度に渡すことができます。
     call: function(method){
       this.apply(method, _.tail(arguments));
     },
 
-    // ### apply
     // コンテナに格納されているビューに対してメソッドを実行します。
     // `function.apply`のように、メソッドと引数を一度に渡すことができます。
     apply: function(method, args){
@@ -150,7 +141,6 @@ Backbone.ChildViewContainer = (function(Backbone, _){
       });
     },
 
-    // ### _updateLength
     // コンテナの`.length`を更新。
     _updateLength: function(){
       this.length = _.size(this._views);
