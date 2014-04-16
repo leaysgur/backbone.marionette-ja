@@ -34,7 +34,8 @@
 
 Backbone.ChildViewContainer = (function(Backbone, _){
 
-  // ## コンストラクタ
+  // コンストラクタ
+  // ---------------------------
   var Container = function(views){
     this._views = {};
     this._indexByModel = {};
@@ -44,7 +45,8 @@ Backbone.ChildViewContainer = (function(Backbone, _){
     _.each(views, this.add, this);
   };
 
-  // ## メソッド
+  // メソッド
+  // ---------------------------
   _.extend(Container.prototype, {
 
     // コンテナに対してビューを追加します。
