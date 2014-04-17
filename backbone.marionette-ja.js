@@ -962,12 +962,11 @@ Marionette.Region = function(options){
 
 _.extend(Marionette.Region, {
 
-  // Build an instance of a region by passing in a configuration object
-  // and a default region type to use if none is specified in the config.
+  // 設定オブジェクトを使って、リージョンのインスタンスを作ります。
+  // リージョンのタイプを初期タイプとして設定します。
   //
-  // The config object should either be a string as a jQuery DOM selector,
-  // a Region type directly, or an object literal that specifies both
-  // a selector and regionType:
+  // 設定オブジェクトは、jQueryのDOMセレクタ名とリージョンタイプ、
+  // もしくは、以下のようなオブジェクトリテラルで指定します。
   //
   // ```js
   // {
@@ -988,8 +987,7 @@ _.extend(Marionette.Region, {
 
     var selector, RegionType;
 
-    // get the selector for the region
-
+    // セレクタを取得
     if (regionIsString) {
       selector = regionConfig;
     }
@@ -999,8 +997,7 @@ _.extend(Marionette.Region, {
       delete regionConfig.selector;
     }
 
-    // get the type for the region
-
+    // リージョンのタイプを取得
     if (regionIsType){
       RegionType = regionConfig;
     }
@@ -1020,15 +1017,14 @@ _.extend(Marionette.Region, {
 
     regionConfig.el = selector;
 
-    // build the region instance
+    // インスタンス作成
     var region = new RegionType(regionConfig);
 
-    // override the `getEl` function if we have a parentEl
-    // this must be overridden to ensure the selector is found
-    // on the first use of the region. if we try to assign the
-    // region's `el` to `parentEl.find(selector)` in the object
-    // literal to build the region, the element will not be
-    // guaranteed to be in the DOM already, and will cause problems
+    // リージョン内でセレクタが要素を見つけられるように、
+    // 親要素を持っている場合、`getEl`メソッドをオーバーライドします。
+    // リージョン作成時に、オブジェクトリテラルで指定された`el`を、
+    // `parentEl.find(selector)`で取得しようとしても、
+    // その持点でDOMに組み込まれていないかも知れず、問題になるかもしれません。
     if (regionConfig.parentEl){
       region.getEl = function(selector) {
         var parentEl = regionConfig.parentEl;
@@ -1049,12 +1045,12 @@ _.extend(Marionette.Region, {
 
 _.extend(Marionette.Region.prototype, Backbone.Events, {
 
-  // Displays a backbone view instance inside of the region.
-  // Handles calling the `render` method for you. Reads content
-  // directly from the `el` attribute. Also calls an optional
-  // `onShow` and `close` method on your view, just after showing
-  // or just before closing the view, respectively.
-  // The `preventClose` option can be used to prevent a view from being destroyed on show.
+  // リージョン内のBackboneのビューのインスタンスを表示します。
+  // `el`に指定した値も参照し、`render`メソッドを自動的に実行します。
+  // そして、`onShow`と`onClose`メソッドををビューに提供します。
+  // ビューを表示した直後、削除される直前に実行されるハンドラです。
+  // `preventClose`オプションを使えば、新しいビューの表示時に、
+  // 自動的に古いビューを削除する挙動を抑制できます。
   show: function(view, options){
     this.ensureEl();
 
@@ -1063,7 +1059,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     var isDifferentView = view !== this.currentView;
     var preventClose =  !!showOptions.preventClose;
 
-    // only close the view if we don't want to preventClose and the view is different
+    // 異なるビューで、preventCloseの指定がない場合に、古いビューを削除
     var _shouldCloseView = !preventClose && isDifferentView;
 
     if (_shouldCloseView) {
@@ -1090,25 +1086,27 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     }
   },
 
-  // Override this method to change how the region finds the
-  // DOM element that it manages. Return a jQuery selector object.
+  // リージョンが管理するDOMを検索する挙動を変えるには、
+  // このメソッドをオーバーライドします。
+  // このメソッドは、jQueryオブジェクトを返します。
   getEl: function(selector){
     return Marionette.$(selector);
   },
 
-  // Override this method to change how the new view is
-  // appended to the `$el` that the region is managing
+  // リージョンが管理するビューを、
+  // どのように`$el`に追加するかの挙動を変えるには、
+  // このメソッドをオーバーライドします。
   open: function(view){
     this.$el.empty().append(view.el);
   },
 
-  // Close the current view, if there is one. If there is no
-  // current view, it does nothing and returns immediately.
+  // 現在表示しているビューを削除します。
+  // 何もない場合は、何もせず即座に返ります。
   close: function(){
     var view = this.currentView;
     if (!view || view.isClosed){ return; }
 
-    // call 'close' or 'remove', depending on which is found
+    // 'close'か'remove'か、見つかった方を実行
     if (view.close) { view.close(); }
     else if (view.remove) { view.remove(); }
 
@@ -1117,31 +1115,28 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {
     delete this.currentView;
   },
 
-  // Attach an existing view to the region. This
-  // will not call `render` or `onShow` for the new view,
-  // and will not replace the current HTML for the `el`
-  // of the region.
+  // 既存のビューをリージョンにセットします。
+  // この場合、`render`や`onShow`は実行されず、
+  // リージョンの`el`を置き換えることもしません。
   attachView: function(view){
     this.currentView = view;
   },
 
-  // Reset the region by closing any existing view and
-  // clearing out the cached `$el`. The next time a view
-  // is shown via this region, the region will re-query the
-  // DOM for the region's `el`.
+  // リージョンに属する全てのビューを削除し、キャッシュされた`$el`を削除します。
+  // 次にビューのが表示されるときには、リージョンの`el`のために再度要素を取得します。
   reset: function(){
     this.close();
     delete this.$el;
   }
 });
 
-// Copy the `extend` function used by Backbone's classes
+// Backboneの`extend`を継承
 Marionette.Region.extend = Marionette.extend;
 
 // Marionette.RegionManager
 // ------------------------
 //
-// Manage one or more related `Marionette.Region` objects.
+// 1つまたは複数のリージョンを管理します。
 Marionette.RegionManager = (function(Marionette){
 
   var RegionManager = Marionette.Controller.extend({
@@ -1150,9 +1145,8 @@ Marionette.RegionManager = (function(Marionette){
       Marionette.Controller.prototype.constructor.call(this, options);
     },
 
-    // Add multiple regions using an object literal, where
-    // each key becomes the region name, and each value is
-    // the region definition.
+    // オブジェクトリテラルを使って、複数のリージョンを追加します。
+    // キーがリージョン名、バリューがリージョンの定義であるセレクタです。
     addRegions: function(regionDefinitions, defaults){
       var regions = {};
 
@@ -1172,8 +1166,7 @@ Marionette.RegionManager = (function(Marionette){
       return regions;
     },
 
-    // Add an individual region to the region manager,
-    // and return the region instance
+    // 1つのリージョンを追加し、リージョンのインスタンスを返します。
     addRegion: function(name, definition){
       var region;
 
@@ -1194,47 +1187,46 @@ Marionette.RegionManager = (function(Marionette){
       return region;
     },
 
-    // Get a region by name
+    // リージョン名でリージョンを取得します。
     get: function(name){
       return this._regions[name];
     },
 
-    // Remove a region by name
+    // リージョン名でリージョンを削除します。
     removeRegion: function(name){
       var region = this._regions[name];
       this._remove(name, region);
     },
 
-    // Close all regions in the region manager, and
-    // remove them
+    // 追加したリージョンを全て削除します。
     removeRegions: function(){
       _.each(this._regions, function(region, name){
         this._remove(name, region);
       }, this);
     },
 
-    // Close all regions in the region manager, but
-    // leave them attached
+    // 追加したリージョンを全て削除しますが、
+    // 引き続き管理下におきます。
     closeRegions: function(){
       _.each(this._regions, function(region, name){
         region.close();
       }, this);
     },
 
-    // Close all regions and shut down the region
-    // manager entirely
+    // 追加したリージョンを全て削除し、
+    // リージョンマネージャー自身も削除します。
     close: function(){
       this.removeRegions();
       Marionette.Controller.prototype.close.apply(this, arguments);
     },
 
-    // internal method to store regions
+    // リージョンを追加する内部メソッドです。
     _store: function(name, region){
       this._regions[name] = region;
       this._setLength();
     },
 
-    // internal method to remove a region
+    // リージョンを削除する内部メソッドです。
     _remove: function(name, region){
       region.close();
       region.stopListening();
@@ -1243,7 +1235,7 @@ Marionette.RegionManager = (function(Marionette){
       this.triggerMethod("region:remove", name, region);
     },
 
-    // set the number of regions current held
+    // 管理しているリージョンの数を更新します。
     _setLength: function(){
       this.length = _.size(this._regions);
     }
