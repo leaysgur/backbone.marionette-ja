@@ -2434,11 +2434,10 @@ _.extend(Marionette.Region, {</pre></div></div>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-126">&#182;</a>
               </div>
-              <p>Build an instance of a region by passing in a configuration object
-and a default region type to use if none is specified in the config.</p>
-<p>The config object should either be a string as a jQuery DOM selector,
-a Region type directly, or an object literal that specifies both
-a selector and regionType:</p>
+              <p>設定オブジェクトを使って、リージョンのインスタンスを作ります。
+リージョンのタイプを初期タイプとして設定します。</p>
+<p>設定オブジェクトは、jQueryのDOMセレクタ名とリージョンタイプ、
+もしくは、以下のようなオブジェクトリテラルで指定します。</p>
 <pre><code class="lang-js">{
   selector: <span class="hljs-string">"#foo"</span>,
   regionType: MyCustomRegion
@@ -2468,12 +2467,11 @@ a selector and regionType:</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-127">&#182;</a>
               </div>
-              <p>get the selector for the region</p>
+              <p>セレクタを取得</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>
-    <span class="hljs-keyword">if</span> (regionIsString) {
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (regionIsString) {
       selector = regionConfig;
     }
 
@@ -2491,12 +2489,11 @@ a selector and regionType:</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-128">&#182;</a>
               </div>
-              <p>get the type for the region</p>
+              <p>リージョンのタイプを取得</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>
-    <span class="hljs-keyword">if</span> (regionIsType){
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (regionIsType){
       RegionType = regionConfig;
     }
 
@@ -2524,7 +2521,7 @@ a selector and regionType:</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-129">&#182;</a>
               </div>
-              <p>build the region instance</p>
+              <p>インスタンス作成</p>
 
             </div>
             
@@ -2539,12 +2536,11 @@ a selector and regionType:</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-130">&#182;</a>
               </div>
-              <p>override the <code>getEl</code> function if we have a parentEl
-this must be overridden to ensure the selector is found
-on the first use of the region. if we try to assign the
-region’s <code>el</code> to <code>parentEl.find(selector)</code> in the object
-literal to build the region, the element will not be
-guaranteed to be in the DOM already, and will cause problems</p>
+              <p>リージョン内でセレクタが要素を見つけられるように、
+親要素を持っている場合、<code>getEl</code>メソッドをオーバーライドします。
+リージョン作成時に、オブジェクトリテラルで指定された<code>el</code>を、
+<code>parentEl.find(selector)</code>で取得しようとしても、
+その持点でDOMに組み込まれていないかも知れず、問題になるかもしれません。</p>
 
             </div>
             
@@ -2600,12 +2596,12 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {</pre></div></div>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-133">&#182;</a>
               </div>
-              <p>Displays a backbone view instance inside of the region.
-Handles calling the <code>render</code> method for you. Reads content
-directly from the <code>el</code> attribute. Also calls an optional
-<code>onShow</code> and <code>close</code> method on your view, just after showing
-or just before closing the view, respectively.
-The <code>preventClose</code> option can be used to prevent a view from being destroyed on show.</p>
+              <p>リージョン内のBackboneのビューのインスタンスを表示します。
+<code>el</code>に指定した値も参照し、<code>render</code>メソッドを自動的に実行します。
+そして、<code>onShow</code>と<code>onClose</code>メソッドををビューに提供します。
+ビューを表示した直後、削除される直前に実行されるハンドラです。
+<code>preventClose</code>オプションを使えば、新しいビューの表示時に、
+自動的に古いビューを削除する挙動を抑制できます。</p>
 
             </div>
             
@@ -2626,7 +2622,7 @@ The <code>preventClose</code> option can be used to prevent a view from being de
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-134">&#182;</a>
               </div>
-              <p>only close the view if we don’t want to preventClose and the view is different</p>
+              <p>異なるビューで、preventCloseの指定がない場合に、古いビューを削除</p>
 
             </div>
             
@@ -2665,8 +2661,9 @@ The <code>preventClose</code> option can be used to prevent a view from being de
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-135">&#182;</a>
               </div>
-              <p>Override this method to change how the region finds the
-DOM element that it manages. Return a jQuery selector object.</p>
+              <p>リージョンが管理するDOMを検索する挙動を変えるには、
+このメソッドをオーバーライドします。
+このメソッドは、jQueryオブジェクトを返します。</p>
 
             </div>
             
@@ -2683,8 +2680,9 @@ DOM element that it manages. Return a jQuery selector object.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-136">&#182;</a>
               </div>
-              <p>Override this method to change how the new view is
-appended to the <code>$el</code> that the region is managing</p>
+              <p>リージョンが管理するビューを、
+どのように<code>$el</code>に追加するかの挙動を変えるには、
+このメソッドをオーバーライドします。</p>
 
             </div>
             
@@ -2701,8 +2699,8 @@ appended to the <code>$el</code> that the region is managing</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-137">&#182;</a>
               </div>
-              <p>Close the current view, if there is one. If there is no
-current view, it does nothing and returns immediately.</p>
+              <p>現在表示しているビューを削除します。
+何もない場合は、何もせず即座に返ります。</p>
 
             </div>
             
@@ -2719,7 +2717,7 @@ current view, it does nothing and returns immediately.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-138">&#182;</a>
               </div>
-              <p>call ‘close’ or ‘remove’, depending on which is found</p>
+              <p>‘close’か’remove’か、見つかった方を実行</p>
 
             </div>
             
@@ -2740,10 +2738,9 @@ current view, it does nothing and returns immediately.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-139">&#182;</a>
               </div>
-              <p>Attach an existing view to the region. This
-will not call <code>render</code> or <code>onShow</code> for the new view,
-and will not replace the current HTML for the <code>el</code>
-of the region.</p>
+              <p>既存のビューをリージョンにセットします。
+この場合、<code>render</code>や<code>onShow</code>は実行されず、
+リージョンの<code>el</code>を置き換えることもしません。</p>
 
             </div>
             
@@ -2760,10 +2757,8 @@ of the region.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-140">&#182;</a>
               </div>
-              <p>Reset the region by closing any existing view and
-clearing out the cached <code>$el</code>. The next time a view
-is shown via this region, the region will re-query the
-DOM for the region’s <code>el</code>.</p>
+              <p>リージョンに属する全てのビューを削除し、キャッシュされた<code>$el</code>を削除します。
+次にビューのが表示されるときには、リージョンの<code>el</code>のために再度要素を取得します。</p>
 
             </div>
             
@@ -2782,7 +2777,7 @@ DOM for the region’s <code>el</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-141">&#182;</a>
               </div>
-              <p>Copy the <code>extend</code> function used by Backbone’s classes</p>
+              <p>Backboneの<code>extend</code>を継承</p>
 
             </div>
             
@@ -2810,7 +2805,7 @@ DOM for the region’s <code>el</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-143">&#182;</a>
               </div>
-              <p>Manage one or more related <code>Marionette.Region</code> objects.</p>
+              <p>1つまたは複数のリージョンを管理します。</p>
 
             </div>
             
@@ -2831,9 +2826,8 @@ DOM for the region’s <code>el</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-144">&#182;</a>
               </div>
-              <p>Add multiple regions using an object literal, where
-each key becomes the region name, and each value is
-the region definition.</p>
+              <p>オブジェクトリテラルを使って、複数のリージョンを追加します。
+キーがリージョン名、バリューがリージョンの定義であるセレクタです。</p>
 
             </div>
             
@@ -2865,8 +2859,7 @@ the region definition.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-145">&#182;</a>
               </div>
-              <p>Add an individual region to the region manager,
-and return the region instance</p>
+              <p>1つのリージョンを追加し、リージョンのインスタンスを返します。</p>
 
             </div>
             
@@ -2899,7 +2892,7 @@ and return the region instance</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-146">&#182;</a>
               </div>
-              <p>Get a region by name</p>
+              <p>リージョン名でリージョンを取得します。</p>
 
             </div>
             
@@ -2916,7 +2909,7 @@ and return the region instance</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-147">&#182;</a>
               </div>
-              <p>Remove a region by name</p>
+              <p>リージョン名でリージョンを削除します。</p>
 
             </div>
             
@@ -2934,8 +2927,7 @@ and return the region instance</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-148">&#182;</a>
               </div>
-              <p>Close all regions in the region manager, and
-remove them</p>
+              <p>追加したリージョンを全て削除します。</p>
 
             </div>
             
@@ -2954,8 +2946,8 @@ remove them</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-149">&#182;</a>
               </div>
-              <p>Close all regions in the region manager, but
-leave them attached</p>
+              <p>追加したリージョンを全て削除しますが、
+引き続き管理下におきます。</p>
 
             </div>
             
@@ -2974,8 +2966,8 @@ leave them attached</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-150">&#182;</a>
               </div>
-              <p>Close all regions and shut down the region
-manager entirely</p>
+              <p>追加したリージョンを全て削除し、
+リージョンマネージャー自身も削除します。</p>
 
             </div>
             
@@ -2993,7 +2985,7 @@ manager entirely</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-151">&#182;</a>
               </div>
-              <p>internal method to store regions</p>
+              <p>リージョンを追加する内部メソッドです。</p>
 
             </div>
             
@@ -3011,7 +3003,7 @@ manager entirely</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-152">&#182;</a>
               </div>
-              <p>internal method to remove a region</p>
+              <p>リージョンを削除する内部メソッドです。</p>
 
             </div>
             
@@ -3032,7 +3024,7 @@ manager entirely</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-153">&#182;</a>
               </div>
-              <p>set the number of regions current held</p>
+              <p>管理しているリージョンの数を更新します。</p>
 
             </div>
             
