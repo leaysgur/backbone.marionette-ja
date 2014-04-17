@@ -908,9 +908,9 @@ _.extend(Marionette.Callbacks.prototype, {
 // Marionette Controller
 // ---------------------
 //
-// A multi-purpose object to use as a controller for
-// modules and routers, and as a mediator for workflow
-// and coordination of other objects, views, and more.
+// 多目的なオブジェクト。
+// モジュール、ルーターのコントローラーであったり、
+// 他のビュー等を仲介するメディエータとして機能したりします。
 Marionette.Controller = function(options){
   this.triggerMethod = Marionette.triggerMethod;
   this.options = options || {};
@@ -923,9 +923,9 @@ Marionette.Controller = function(options){
 Marionette.Controller.extend = Marionette.extend;
 
 // Controller Methods
-// --------------
+// ------------------
 
-// Ensure it can trigger events with Backbone.Events
+// 必ずBackbone.Eventsを使ってイベントをトリガーするように
 _.extend(Marionette.Controller.prototype, Backbone.Events, {
   close: function(){
     this.stopListening();
@@ -938,7 +938,8 @@ _.extend(Marionette.Controller.prototype, Backbone.Events, {
 // Region
 // ------
 //
-// Manage the visual regions of your composite application. See
+// アプリケーションを構成するリージョンを管理します。
+// 以下、参考リンク。
 // http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
 
 Marionette.Region = function(options){
