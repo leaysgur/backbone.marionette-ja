@@ -294,7 +294,7 @@ Wreqr.CommandStorage = (function(){
 
     // コマンド名を指定して、コマンドのオブジェクトを取得します。
     // それらは`commandName`と、`instances`というプロパティを持ちます。
-    // `instances`は、実行するコマンドの配列です。 #CHECK_IT_LATER
+    // `instances`は、実行するコマンド群の配列です。
     getCommands: function(commandName){
       var commands = this._commands[commandName];
 
@@ -398,7 +398,7 @@ Wreqr.Commands = (function(Wreqr){
 // ---------------------
 //
 // リクエスト/レスポンスの実装です。
-// リクエストにハンドラを登録し、レスポンスを返します。
+// リクエストにハンドラを登録し、レスポンスを返すようにします。
 Wreqr.RequestResponse = (function(Wreqr){
   "use strict";
 
@@ -416,17 +416,18 @@ Wreqr.RequestResponse = (function(Wreqr){
 
 // Event Aggregator
 // ----------------
-// A pub-sub object that can be used to decouple various parts
-// of an application through event-driven architecture.
+//
+// 各モジュールの関係を疎結合にし、イベントドリブンで構築するための、
+// Pub/Subの実装を提供するオブジェクトです。
 
 Wreqr.EventAggregator = (function(Backbone, _){
   "use strict";
   var EA = function(){};
 
-  // Copy the `extend` function used by Backbone's classes
+  // Backboneの`extend`機構を使う
   EA.extend = Backbone.Model.extend;
 
-  // Copy the basic Backbone.Events on to the event aggregator
+  // Backbone.Eventsも継承
   _.extend(EA.prototype, Backbone.Events);
 
   return EA;
@@ -435,8 +436,8 @@ Wreqr.EventAggregator = (function(Backbone, _){
 // Wreqr.Channel
 // --------------
 //
-// An object that wraps the three messaging systems:
-// EventAggregator, RequestResponse, Commands
+// 以下のメッセージングの実装をラップするものです。
+// 実装はEventAggregator, RequestResponse, Commandsの3つです。
 Wreqr.Channel = (function(Wreqr){
   "use strict";
 
@@ -449,7 +450,7 @@ Wreqr.Channel = (function(Wreqr){
 
   _.extend(Channel.prototype, {
 
-    // Remove all handlers from the messaging systems of this channel
+    // このチャンネルのハンドラ類を全て削除します。
     reset: function() {
       this.vent.off();
       this.vent.stopListening();
@@ -458,7 +459,7 @@ Wreqr.Channel = (function(Wreqr){
       return this;
     },
 
-    // Connect a hash of events; one for each messaging system
+    // それぞれのメッセージングの実装に対して与えられたハッシュを紐付けします。
     connectEvents: function(hash, context) {
       this._connect('vent', hash, context);
       return this;
@@ -474,7 +475,7 @@ Wreqr.Channel = (function(Wreqr){
       return this;
     },
 
-    // Attach the handlers to a given message system `type`
+    // メッセージングの`type`に応じて、ハンドラを設定します。
     _connect: function(type, hash, context) {
       if (!hash) {
         return;
@@ -493,10 +494,10 @@ Wreqr.Channel = (function(Wreqr){
   return Channel;
 })(Wreqr);
 
-  // Wreqr.Radio
-// --------------
+// Wreqr.Radio
+// -----------
 //
-// An object that lets you communicate with many channels.
+// 複数のチャンネルを操作するオブジェクトを提供します。
 Wreqr.radio = (function(Wreqr){
   "use strict";
 
@@ -587,17 +588,17 @@ Wreqr.radio = (function(Wreqr){
 var Marionette = (function(global, Backbone, _){
   "use strict";
 
-  // Define and export the Marionette namespace
+  // Marionetteとしてエクスポートする名前空間をココで指定
   var Marionette = {};
   Backbone.Marionette = Marionette;
 
-  // Get the DOM manipulator for later use
+  // あとで使うDOM操作のために`$`を取得
   Marionette.$ = Backbone.$;
 
 // Helpers
 // -------
-
-// For slicing `arguments` in functions
+//
+// `arguments`を`slice`する用
 var slice = Array.prototype.slice;
 
 function throwError(message, name) {
@@ -608,15 +609,15 @@ function throwError(message, name) {
 
 // Marionette.extend
 // -----------------
-
-// Borrow the Backbone `extend` method so we can use it as needed
+//
+// Backboneの`extend`を継承しておく
 Marionette.extend = Backbone.Model.extend;
 
 // Marionette.getOption
 // --------------------
-
-// Retrieve an object, function or other value from a target
-// object or its `options`, with `options` taking precedence.
+//
+// 与えられたターゲットから値を取得します。
+// `options`があればそちらを優先して取得します。
 Marionette.getOption = function(target, optionName){
   if (!target || !optionName){ return; }
   var value;
@@ -631,10 +632,10 @@ Marionette.getOption = function(target, optionName){
 };
 
 // Marionette.normalizeMethods
-// ----------------------
-
-// Pass in a mapping of events => functions or function names
-// and return a mapping of events => functions
+// ---------------------------
+//
+// イベント名: メソッド、またはメソッド名のマップを、
+// イベント名: メソッドの形に揃えて返します。
 Marionette.normalizeMethods = function(hash) {
   var normalizedHash = {}, method;
   _.each(hash, function(fn, name) {
@@ -651,9 +652,9 @@ Marionette.normalizeMethods = function(hash) {
 };
 
 
-// allows for the use of the @ui. syntax within
-// a given key for triggers and events
-// swaps the @ui with the associated selector
+// トリガーやイベント定義の際、
+// 定義したuiの要素に対して、
+// `@ui.elementName`といった記述を可能にします。
 Marionette.normalizeUIKeys = function(hash, ui) {
   if (typeof(hash) === "undefined") {
     return;
@@ -672,10 +673,10 @@ Marionette.normalizeUIKeys = function(hash, ui) {
   return hash;
 };
 
-// Mix in methods from Underscore, for iteration, and other
-// collection related features.
-// Borrowing this code from Backbone.Collection:
+// Backbone.Collectionからコードを拝借。
 // http://backbonejs.org/docs/backbone.html#section-106
+//
+// コレクションに関するの操作のために、Underscoreのメソッドを実装します。
 Marionette.actAsCollection = function(object, listProperty) {
   var methods = ['forEach', 'each', 'map', 'find', 'detect', 'filter',
     'select', 'reject', 'every', 'all', 'some', 'any', 'include',
