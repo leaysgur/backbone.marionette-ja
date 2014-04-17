@@ -692,38 +692,34 @@ Marionette.actAsCollection = function(object, listProperty) {
   });
 };
 
-// Trigger an event and/or a corresponding method name. Examples:
-//
-// `this.triggerMethod("foo")` will trigger the "foo" event and
-// call the "onFoo" method.
-//
-// `this.triggerMethod("foo:bar")` will trigger the "foo:bar" event and
-// call the "onFooBar" method.
+// イベントを発火、もしくはイベント名に一致するメソッドを実行します。
+// 例えば、
+// `this.triggerMethod("foo")`は、
+// "foo"イベントを発火し、"onFoo"に紐付けられたメソッドを実行します。
 Marionette.triggerMethod = (function(){
 
-  // split the event name on the ":"
+  // イベント名を":"で分割
   var splitter = /(^|:)(\w)/gi;
 
-  // take the event section ("section1:section2:section3")
-  // and turn it in to uppercase name
+  // イベント名を受け取り、アッパーケースにします。
   function getEventName(match, prefix, eventName) {
     return eventName.toUpperCase();
   }
 
-  // actual triggerMethod implementation
+  // 実装の実態はココに
   var triggerMethod = function(event) {
-    // get the method name from the event name
+    // イベント名をメソッド名に
     var methodName = 'on' + event.replace(splitter, getEventName);
     var method = this[methodName];
 
-    // trigger the event, if a trigger method exists
+    // トリガーがメソッドの場合それを実行
     if(_.isFunction(this.trigger)) {
       this.trigger.apply(this, arguments);
     }
 
-    // call the onMethodName if it exists
+    // `onMethodName`の形式でメソッドが指定されていれば実行
     if (_.isFunction(method)) {
-      // pass all arguments, except the event name
+      // イベント名以外を引数として渡す
       return method.apply(this, _.tail(arguments));
     }
   };
@@ -734,25 +730,25 @@ Marionette.triggerMethod = (function(){
 // DOMRefresh
 // ----------
 //
-// Monitor a view's state, and after it has been rendered and shown
-// in the DOM, trigger a "dom:refresh" event every time it is
-// re-rendered.
+// ビューの状態を監視し、DOMに組み込まれたタイミングや、
+// 更新されたタイミングで、"dom:refresh"イベントを発火します。
 
 Marionette.MonitorDOMRefresh = (function(documentElement){
-  // track when the view has been shown in the DOM,
-  // using a Marionette.Region (or by other means of triggering "show")
+  // ビューがDOMに組み込まれたかどうかを監視するハンドラ。
+  // Marionette.Regionを使います。
   function handleShow(view){
     view._isShown = true;
     triggerDOMRefresh(view);
   }
 
-  // track when the view has been rendered
+  // ビューがレンダリングされたかどうかを監視するハンドラ
   function handleRender(view){
     view._isRendered = true;
     triggerDOMRefresh(view);
   }
 
-  // Trigger the "dom:refresh" event and corresponding "onDomRefresh" method
+  // "dom:refresh"イベントを発火し、
+  // "onDomRefresh"に紐付けられたメソッドを実行します。
   function triggerDOMRefresh(view){
     if (view._isShown && view._isRendered && isInDOM(view)){
       if (_.isFunction(view.triggerMethod)){
@@ -765,7 +761,7 @@ Marionette.MonitorDOMRefresh = (function(documentElement){
     return documentElement.contains(view.el);
   }
 
-  // Export public API
+  // エクスポート
   return function(view){
     view.listenTo(view, "show", function(){
       handleShow(view);
@@ -779,7 +775,7 @@ Marionette.MonitorDOMRefresh = (function(documentElement){
 
 
 // Marionette.bindEntityEvents & unbindEntityEvents
-// ---------------------------
+// ------------------------------------------------
 //
 // These methods are used to bind/unbind a backbone "entity" (collection/model)
 // to methods on a target object.
@@ -858,7 +854,7 @@ Marionette.MonitorDOMRefresh = (function(documentElement){
     });
   }
 
-  // Export Public API
+  // エクスポート
   Marionette.bindEntityEvents = function(target, entity, bindings){
     iterateEvents(target, entity, bindings, bindToFunction, bindFromStrings);
   };
