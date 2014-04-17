@@ -1251,8 +1251,8 @@ Marionette.RegionManager = (function(Marionette){
 // Template Cache
 // --------------
 
-// Manage templates stored in `<script>` blocks,
-// caching them for faster access.
+// `<script>`タグ内のテンプレートをキャッシュし、
+// 効率よく利用できるように管理します。
 Marionette.TemplateCache = function(templateId){
   this.templateId = templateId;
 };
