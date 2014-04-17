@@ -35,7 +35,7 @@
 Backbone.ChildViewContainer = (function(Backbone, _){
 
   // コンストラクタ
-  // ---------------------------
+  // --------------
   var Container = function(views){
     this._views = {};
     this._indexByModel = {};
@@ -46,7 +46,7 @@ Backbone.ChildViewContainer = (function(Backbone, _){
   };
 
   // メソッド
-  // ---------------------------
+  // --------
   _.extend(Container.prototype, {
 
     // コンテナに対してビューを追加します。
@@ -143,7 +143,7 @@ Backbone.ChildViewContainer = (function(Backbone, _){
       });
     },
 
-    // コンテナの`.length`を更新。
+    // コンテナの`.length`を更新します。
     _updateLength: function(){
       this.length = _.size(this._views);
     }
@@ -171,7 +171,7 @@ Backbone.ChildViewContainer = (function(Backbone, _){
 })(Backbone, _);
 
 // Backbone.Wreqr (Backbone.Marionette)
-// ----------------------------------
+// ------------------------------------
 // v1.1.0
 //
 // Copyright (c)2014 Derick Bailey, Muted Solutions, LLC.
@@ -184,15 +184,15 @@ Backbone.Wreqr = (function(Backbone, Marionette, _){
   "use strict";
   var Wreqr = {};
 
-  // Handlers
+// ハンドラ
 // --------
-// A registry of functions to call, given a name
+// メソッドを名前付きで保存しておくところ。
 
 Wreqr.Handlers = (function(Backbone, _){
   "use strict";
 
-  // Constructor
-  // -----------
+  // コンストラクタ
+  // --------------
 
   var Handlers = function(options){
     this.options = options;
@@ -205,12 +205,12 @@ Wreqr.Handlers = (function(Backbone, _){
 
   Handlers.extend = Backbone.Model.extend;
 
-  // Instance Members
-  // ----------------
+  // インスタンスのメンバ
+  // --------------------
 
   _.extend(Handlers.prototype, Backbone.Events, {
 
-    // Add multiple handlers using an object literal configuration
+    // 複数のハンドラをオブジェクトリテラルで設定できます。
     setHandlers: function(handlers){
       _.each(handlers, function(handler, name){
         var context = null;
@@ -224,8 +224,8 @@ Wreqr.Handlers = (function(Backbone, _){
       }, this);
     },
 
-    // Add a handler for the given name, with an
-    // optional context to run the handler within
+    // ハンドラを名前付きで設定します。
+    // コンテキストをオプションで指定できます。
     setHandler: function(name, handler, context){
       var config = {
         callback: handler,
@@ -237,14 +237,14 @@ Wreqr.Handlers = (function(Backbone, _){
       this.trigger("handler:add", name, handler, context);
     },
 
-    // Determine whether or not a handler is registered
+    // ハンドラが設定されているかを取得します。
     hasHandler: function(name){
       return !! this._wreqrHandlers[name];
     },
 
-    // Get the currently registered handler for
-    // the specified name. Throws an exception if
-    // no handler is found.
+    // 指定した名前のハンドラを取得します。
+    // ハンドラが見つからなかった場合は、例外を投げます。
+    // (とか言いつつreturnしてるだけに見える・・。)
     getHandler: function(name){
       var config = this._wreqrHandlers[name];
 
@@ -258,12 +258,12 @@ Wreqr.Handlers = (function(Backbone, _){
       };
     },
 
-    // Remove a handler for the specified name
+    // 指定した名前のハンドラを削除します。
     removeHandler: function(name){
       delete this._wreqrHandlers[name];
     },
 
-    // Remove all handlers from this registry
+    // 全てのハンドラを削除します。
     removeAllHandlers: function(){
       this._wreqrHandlers = {};
     }
@@ -273,13 +273,13 @@ Wreqr.Handlers = (function(Backbone, _){
 })(Backbone, _);
 
   // Wreqr.CommandStorage
-// --------------------
+// ----------------------
 //
-// Store and retrieve commands for execution.
+// コマンドを格納するストレージです。
 Wreqr.CommandStorage = (function(){
   "use strict";
 
-  // Constructor function
+  // コンストラクタ
   var CommandStorage = function(options){
     this.options = options;
     this._commands = {};
@@ -289,39 +289,38 @@ Wreqr.CommandStorage = (function(){
     }
   };
 
-  // Instance methods
+  // インスタンスメソッド
   _.extend(CommandStorage.prototype, Backbone.Events, {
 
-    // Get an object literal by command name, that contains
-    // the `commandName` and the `instances` of all commands
-    // represented as an array of arguments to process
+    // コマンド名を指定して、コマンドのオブジェクトを取得します。
+    // それらは`commandName`と、`instances`というプロパティを持ちます。
+    // `instances`は、実行するコマンドの配列です。 #CHECK_IT_LATER
     getCommands: function(commandName){
       var commands = this._commands[commandName];
 
-      // we don't have it, so add it
+      // 見つからなかったら追加
       if (!commands){
 
-        // build the configuration
+        // オブジェクト作成
         commands = {
           command: commandName,
           instances: []
         };
 
-        // store it
+        // そして格納
         this._commands[commandName] = commands;
       }
 
       return commands;
     },
 
-    // Add a command by name, to the storage and store the
-    // args for the command
+    // 名前でコマンドを追加し、引数も格納しておきます。
     addCommand: function(commandName, args){
       var command = this.getCommands(commandName);
       command.instances.push(args);
     },
 
-    // Clear all commands for the given `commandName`
+    // コマンド名を指定して、そのコマンドを全て削除します。
     clearCommands: function(commandName){
       var command = this.getCommands(commandName);
       command.instances = [];
@@ -331,16 +330,15 @@ Wreqr.CommandStorage = (function(){
   return CommandStorage;
 })();
 
-  // Wreqr.Commands
+// Wreqr.Commands
 // --------------
 //
-// A simple command pattern implementation. Register a command
-// handler and execute it.
+// コマンドのハンドラを登録し実行する、シンプルなコマンドパターンの実装です。
 Wreqr.Commands = (function(Wreqr){
   "use strict";
 
   return Wreqr.Handlers.extend({
-    // default storage type
+    // デフォルトのストレージタイプ
     storageType: Wreqr.CommandStorage,
 
     constructor: function(options){
@@ -353,7 +351,7 @@ Wreqr.Commands = (function(Wreqr){
       Wreqr.Handlers.prototype.constructor.apply(this, args);
     },
 
-    // Execute a named command with the supplied args
+    // 与えられた名前と引数でもってコマンドを実行します。
     execute: function(name, args){
       name = arguments[0];
       args = Array.prototype.slice.call(arguments, 1);
@@ -366,11 +364,11 @@ Wreqr.Commands = (function(Wreqr){
 
     },
 
-    // Internal method to handle bulk execution of stored commands
+    // 格納されたコマンドを実行するための内部メソッドです。
     _executeCommands: function(name, handler, context){
       var command = this.storage.getCommands(name);
 
-      // loop through and execute all the stored command instances
+      // 格納されているコマンドの配列をループし、インスタンス全てを実行します。
       _.each(command.instances, function(args){
         handler.apply(context, args);
       });
@@ -378,8 +376,8 @@ Wreqr.Commands = (function(Wreqr){
       this.storage.clearCommands(name);
     },
 
-    // Internal method to initialize storage either from the type's
-    // `storageType` or the instance `options.storageType`.
+    // コマンドのストレージを初期化する内部メソッドです。
+    // `storageType`か`options.storageType`のいずれかを指定します。
     _initializeStorage: function(options){
       var storage;
 
@@ -396,11 +394,11 @@ Wreqr.Commands = (function(Wreqr){
 
 })(Wreqr);
 
-  // Wreqr.RequestResponse
+// Wreqr.RequestResponse
 // ---------------------
 //
-// A simple request/response implementation. Register a
-// request handler, and return a response from it
+// リクエスト/レスポンスの実装です。
+// リクエストにハンドラを登録し、レスポンスを返します。
 Wreqr.RequestResponse = (function(Wreqr){
   "use strict";
 
@@ -416,7 +414,7 @@ Wreqr.RequestResponse = (function(Wreqr){
 
 })(Wreqr);
 
-  // Event Aggregator
+// Event Aggregator
 // ----------------
 // A pub-sub object that can be used to decouple various parts
 // of an application through event-driven architecture.
@@ -434,7 +432,7 @@ Wreqr.EventAggregator = (function(Backbone, _){
   return EA;
 })(Backbone, _);
 
-  // Wreqr.Channel
+// Wreqr.Channel
 // --------------
 //
 // An object that wraps the three messaging systems:
