@@ -777,24 +777,22 @@ Marionette.MonitorDOMRefresh = (function(documentElement){
 // Marionette.bindEntityEvents & unbindEntityEvents
 // ------------------------------------------------
 //
-// These methods are used to bind/unbind a backbone "entity" (collection/model)
-// to methods on a target object.
+// Backboneの"entity"(コレクションやモデル)に対して、
+// オブジェクトのメソッドをバインド/アンバインドします。
 //
-// The first parameter, `target`, must have a `listenTo` method from the
-// EventBinder object.
+// 第一引数は`target`で、`listenTo`メソッドが使える必要があります。
 //
-// The second parameter is the entity (Backbone.Model or Backbone.Collection)
-// to bind the events from.
+// 第二引数はメソッドをバインドしたいBackboneのモデルかコレクションです。
 //
-// The third parameter is a hash of { "event:name": "eventHandler" }
-// configuration. Multiple handlers can be separated by a space. A
-// function can be supplied instead of a string handler name.
+// 第三引数は{ "event:name": "eventHandler" }形式のハッシュです。
+// メソッド名ではなくメソッドそのものを指定することもできます。
 
 (function(Marionette){
   "use strict";
 
   // Bind the event to handlers specified as a string of
   // handler names on the target object
+  // メソッド名で指定されたイベントを、ハンドラにバインドします。
   function bindFromStrings(target, entity, evt, methods){
     var methodNames = methods.split(/\s+/);
 
@@ -809,13 +807,12 @@ Marionette.MonitorDOMRefresh = (function(documentElement){
     });
   }
 
-  // Bind the event to a supplied callback function
+  // 与えられたメソッドをイベントにバインドする
   function bindToFunction(target, entity, evt, method){
       target.listenTo(entity, evt, method);
   }
 
-  // Bind the event to handlers specified as a string of
-  // handler names on the target object
+  // 与えられたメソッド名からメソッドを探してきて、イベントをアンバインドする
   function unbindFromStrings(target, entity, evt, methods){
     var methodNames = methods.split(/\s+/);
 
@@ -825,26 +822,25 @@ Marionette.MonitorDOMRefresh = (function(documentElement){
     });
   }
 
-  // Bind the event to a supplied callback function
+  // バインドしたメソッドのアンバインド
   function unbindToFunction(target, entity, evt, method){
       target.stopListening(entity, evt, method);
   }
 
 
-  // generic looping function
+  // ハッシュはもちろん複数くるのでループする
   function iterateEvents(target, entity, bindings, functionCallback, stringCallback){
     if (!entity || !bindings) { return; }
 
-    // allow the bindings to be a function
+    // メソッドそのものがきてもOK
     if (_.isFunction(bindings)){
       bindings = bindings.call(target);
     }
 
-    // iterate the bindings and bind them
+    // ハッシュをイテレートしてバインドしてく
     _.each(bindings, function(methods, evt){
 
-      // allow for a function as the handler,
-      // or a list of event names as a string
+      // メソッド名か、メソッドそのものか判断して処理
       if (_.isFunction(methods)){
         functionCallback(target, entity, evt, methods);
       } else {
@@ -869,9 +865,8 @@ Marionette.MonitorDOMRefresh = (function(documentElement){
 // Callbacks
 // ---------
 
-// A simple way of managing a collection of callbacks
-// and executing them at a later point in time, using jQuery's
-// `Deferred` object.
+// 複数のコールバックをよしなに処理します。
+// jQueryの`Deferred`オブジェクトを使います。
 Marionette.Callbacks = function(){
   this._deferred = Marionette.$.Deferred();
   this._callbacks = [];
@@ -879,9 +874,8 @@ Marionette.Callbacks = function(){
 
 _.extend(Marionette.Callbacks.prototype, {
 
-  // Add a callback to be executed. Callbacks added here are
-  // guaranteed to execute, even if they are added after the
-  // `run` method is called.
+  // あとでまとめて実行したいコールバックを追加します。
+  // `run`メソッドを実行した後でも、ココで追加したコールバックは実行されます。
   add: function(callback, contextOverride){
     this._callbacks.push({cb: callback, ctx: contextOverride});
 
@@ -891,15 +885,15 @@ _.extend(Marionette.Callbacks.prototype, {
     });
   },
 
-  // Run all registered callbacks with the context specified.
-  // Additional callbacks can be added after this has been run
-  // and they will still be executed.
+  // 追加しておいたコールバックを実行します。
+  // コールバックのコンテキストは指定することができます。
+  // この後に追加したコールバックは、即実行されます。
   run: function(options, context){
     this._deferred.resolve(context, options);
   },
 
-  // Resets the list of callbacks to be run, allowing the same list
-  // to be run multiple times - whenever the `run` method is called.
+  // 追加したコールバックをリセットします。
+  // これにより同じ内容のコールバックを複数回実行することもできます。
   reset: function(){
     var callbacks = this._callbacks;
     this._deferred = Marionette.$.Deferred();
