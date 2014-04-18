@@ -2472,21 +2472,16 @@ Marionette.Behaviors = (function(Marionette, _) {
 
 // AppRouter
 // ---------
-
-// Reduce the boilerplate code of handling route events
-// and then calling a single method on another object.
-// Have your routers configured to call the method on
-// your object, directly.
 //
-// Configure an AppRouter with `appRoutes`.
+// ルートをハンドリングして、異なるオブジェクトのとあるメソッドを実行する・・、
+// そのようなコードを減らすのがAppRouterです。
+// `appRoutes`で、指定したオブジェクトのメソッドを直接指定できるようになっています。
 //
-// App routers can only take one `controller` object.
-// It is recommended that you divide your controller
-// objects in to smaller pieces of related functionality
-// and have multiple routers / controllers, instead of
-// just one giant router and controller.
+// コレは、`controller`というオブジェクトのみを引数に取るようになっています。
+// 1つの巨大なルーターとコントローラーが出来上がるより、
+// 適切な単位で分割することを推奨しているからです。
 //
-// You can also add standard routes to an AppRouter.
+// もちろん、いわゆるルーターとしての使い方も可能です。
 
 Marionette.AppRouter = Backbone.Router.extend({
 
@@ -2501,32 +2496,31 @@ Marionette.AppRouter = Backbone.Router.extend({
     this.on("route", this._processOnRoute, this);
   },
 
-  // Similar to route method on a Backbone Router but
-  // method is called on the controller
+  // Backbone.Routerの`route`に似ていますが、
+  // こちらは指定したコントローラーのメソッドを実行します。
   appRoute: function(route, methodName) {
     var controller = this._getController();
     this._addAppRoute(controller, route, methodName);
   },
 
-  // process the route event and trigger the onRoute
-  // method call, if it exists
+  // 該当するイベントをトリガーし、onRouteを発火します。
   _processOnRoute: function(routeName, routeArgs){
-    // find the path that matched
+    // 一致するパスを探す
     var routePath = _.invert(this.appRoutes)[routeName];
 
-    // make sure an onRoute is there, and call it
+    // inRouteがあることを確認し、実行
     if (_.isFunction(this.onRoute)){
       this.onRoute(routeName, routePath, routeArgs);
     }
   },
 
-  // Internal method to process the `appRoutes` for the
-  // router, and turn them in to routes that trigger the
-  // specified method on the specified `controller`.
+  // `appRoutes`の定義に従い、
+  // 指定された`controller`で、該当するメソッドを実行する内部メソッドです。
   processAppRoutes: function(controller, appRoutes) {
     if (!appRoutes){ return; }
 
-    var routeNames = _.keys(appRoutes).reverse(); // Backbone requires reverted order of routes
+    // Backboneのルートは逆順
+    var routeNames = _.keys(appRoutes).reverse();
 
     _.each(routeNames, function(route) {
       this._addAppRoute(controller, route, appRoutes[route]);
@@ -2550,10 +2544,9 @@ Marionette.AppRouter = Backbone.Router.extend({
 
 // Application
 // -----------
-
-// Contain and manage the composite application as a whole.
-// Stores and starts up `Region` objects, includes an
-// event aggregator as `app.vent`
+//
+// いわゆるアプリケーション全体を統括します。
+// `Region`オブジェクトを持ち、`app.vent`として全体用のイベントも管理します。
 Marionette.Application = function(options){
   this._initRegionManager();
   this._initCallbacks = new Marionette.Callbacks();
@@ -2568,26 +2561,24 @@ Marionette.Application = function(options){
 };
 
 _.extend(Marionette.Application.prototype, Backbone.Events, {
-  // Command execution, facilitated by Backbone.Wreqr.Commands
+  // Backbone.Wreqr.Commandsのコマンドを実行します。
   execute: function(){
     this.commands.execute.apply(this.commands, arguments);
   },
 
-  // Request/response, facilitated by Backbone.Wreqr.RequestResponse
+  // Backbone.Wreqr.RequestResponseの`request`です。
   request: function(){
     return this.reqres.request.apply(this.reqres, arguments);
   },
 
-  // Add an initializer that is either run at when the `start`
-  // method is called, or run immediately if added after `start`
-  // has already been called.
+  // `start`メソッドが呼ばれた時に実行される初期化メソッドを追加します。
+  // `start`メソッドが呼ばれた後で追加されたものは、即実行されます。
   addInitializer: function(initializer){
     this._initCallbacks.add(initializer);
   },
 
-  // kick off all of the application's processes.
-  // initializes all of the regions that have been added
-  // to the app, and runs all of the initializer functions
+  // アプリケーションを起動します。
+  // 追加された全てのリージョンの初期化メソッドを実行します。
   start: function(options){
     this.triggerMethod("initialize:before", options);
     this._initCallbacks.run(options, this);
@@ -2596,49 +2587,44 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
     this.triggerMethod("start", options);
   },
 
-  // Add regions to your app.
-  // Accepts a hash of named strings or Region objects
+  // アプリケーションにリージョンを追加します。
+  // 以下の2パターンの使い方ができます。
   // addRegions({something: "#someRegion"})
   // addRegions({something: Region.extend({el: "#someRegion"}) });
   addRegions: function(regions){
     return this._regionManager.addRegions(regions);
   },
 
-  // Close all regions in the app, without removing them
+  // リージョンを全て閉じますが、削除はしません。
   closeRegions: function(){
     this._regionManager.closeRegions();
   },
 
-  // Removes a region from your app, by name
-  // Accepts the regions name
-  // removeRegion('myRegion')
+  // リージョン名を指定して、そのリージョンを削除します。
   removeRegion: function(region) {
     this._regionManager.removeRegion(region);
   },
 
-  // Provides alternative access to regions
-  // Accepts the region name
-  // getRegion('main')
+  // リージョン名を指定して、そのリージョンを取得します。
   getRegion: function(region) {
     return this._regionManager.get(region);
   },
 
-  // Create a module, attached to the application
+  // アプリケーションに紐付けるモジュールを作成します。
   module: function(moduleNames, moduleDefinition){
 
-    // Overwrite the module class if the user specifies one
+    // 既にモジュールクラスが定義されていればそれを使います。
     var ModuleClass = Marionette.Module.getClass(moduleDefinition);
 
-    // slice the args, and add this application object as the
-    // first argument of the array
+    // 引数の先頭に、アプリケーション自身を入れ込みます。
     var args = slice.call(arguments);
     args.unshift(this);
 
-    // see the Marionette.Module object for more information
+    // 詳しくは、Marionette.Moduleのコードを参照してください。
     return ModuleClass.create.apply(ModuleClass, args);
   },
 
-  // Internal method to set up the region manager
+  // リージョンマネージャーを起動する内部メソッドです。
   _initRegionManager: function(){
     this._regionManager = new Marionette.RegionManager();
 
@@ -2652,12 +2638,12 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {
   }
 });
 
-// Copy the `extend` function used by Backbone's classes
+// Backboneの`extend`を継承
 Marionette.Application.extend = Marionette.extend;
 
 // Module
 // ------
-
+//
 // A simple module system, used to create privacy and encapsulation in
 // Marionette applications
 Marionette.Module = function(moduleName, app, options){
