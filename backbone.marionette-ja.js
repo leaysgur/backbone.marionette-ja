@@ -2248,35 +2248,31 @@ Marionette.Layout = Marionette.ItemView.extend({
 // Behavior
 // --------
 //
-// ビヘイビアはどんなビューにもミックスインできる独立したDOMのインターフェースです。
+// ビヘイビアはどんなビューにもミックスインできる独立したDOM/UIのインターフェースです。
 // これを使うことでブラックボックス化しやすい処理を切り出すことができ、
 // ビューのコードをシンプルに保つことができます。
 Marionette.Behavior = (function(_, Backbone){
   function Behavior(options, view){
-    // Setup reference to the view.
-    // this comes in handle when a behavior
-    // wants to directly talk up the chain
-    // to the view.
+    // ビューへの参照を持ちます。
+    // それによって、ビューと直接やりとりしやすくなります。
     this.view = view;
     this.defaults = _.result(this, "defaults") || {};
     this.options  = _.extend({}, this.defaults, options);
 
-    // proxy behavior $ method to the view
-    // this is useful for doing jquery DOM lookups
-    // scoped to behaviors view.
+    // ビューへの$メソッドです。
+    // ビヘイビアのスコープ内でDOMを取得するのに便利です。
     this.$ = function() {
       return this.view.$.apply(this.view, arguments);
     };
 
-    // Call the initialize method passing
-    // the arguments from the instance constructor
+    // コンストラクタへ渡されたオプションで初期化します。
     this.initialize.apply(this, arguments);
   }
 
   _.extend(Behavior.prototype, Backbone.Events, {
     initialize: function(){},
 
-    // Setup class level proxy for triggerMethod.
+    // ビヘイビアのクラスへのtriggerMethodです。
     triggerMethod: Marionette.triggerMethod
   });
 
@@ -2284,6 +2280,8 @@ Marionette.Behavior = (function(_, Backbone){
   // this allows us to setup a proper
   // inheritence pattern that follow in suite
   // with the rest of Marionette views.
+  // Marionetteのビューがビヘイビアを継承できるよう、
+  // Backboneの`extend`を継承
   Behavior.extend = Marionette.extend;
 
   return Behavior;
@@ -2291,23 +2289,19 @@ Marionette.Behavior = (function(_, Backbone){
 
 // Marionette.Behaviors
 // --------
-
-// Behaviors is a utility class that takes care of
-// glueing your behavior instances to their given View.
-// The most important part of this class is that you
-// **MUST** override the class level behaviorsLookup
-// method for things to work properly.
+//
+// ビヘイビアズはビヘイビアのインスタンスとビューの仲介をします。
+// ビヘイビアズを使うには、必ず`behaviorsLookup`メソッドを実装する必要があります。
 
 Marionette.Behaviors = (function(Marionette, _) {
 
   function Behaviors(view) {
-    // Behaviors defined on a view can be a flat object literal
-    // or it can be a function that returns an object.
+    // ビューで定義されるビヘイビアは、必ずオブジェクトか、
+    // オブジェクトを返すメソッドである必要があります。
     this.behaviors = Behaviors.parseBehaviors(view, _.result(view, 'behaviors'));
 
-    // Wraps several of the view's methods
-    // calling the methods first on each behavior
-    // and then eventually calling the method on the view.
+    // ビューのメソッドのいくつかをラップします。
+    // ビヘイビア側でそれぞれを先に呼び、その後ビュー側のメソッドを実行します。
     Behaviors.wrap(view, this.behaviors, [
       'bindUIElements', 'unbindUIElements',
       'delegateEvents', 'undelegateEvents',
@@ -2321,9 +2315,8 @@ Marionette.Behaviors = (function(Marionette, _) {
     setElement: function(setElement, behaviors) {
       setElement.apply(this, _.tail(arguments, 2));
 
-      // proxy behavior $el to the view's $el.
-      // This is needed because a view's $el proxy
-      // is not set until after setElement is called.
+      // ビューの`$el`を一旦ビヘイビアに保持します。
+      // ビューの`$el`は、`setElement`の実行が終わるまでセットされないためです。
       _.each(behaviors, function(b) {
         b.$el = this.$el;
       }, this);
@@ -2401,23 +2394,21 @@ Marionette.Behaviors = (function(Marionette, _) {
         var behaviorEvents = _.result(b, 'events') || {};
         var behaviorUI = _.result(b, 'ui');
 
-        // Construct an internal UI hash first using
-        // the views UI hash and then the behaviors UI hash.
-        // This allows the user to use UI hash elements
-        // defined in the parent view as well as those
-        // defined in the given behavior.
+        // 内部用にUIオブジェクトを保持します。
+        // 最初にビューのもの、そしてビヘイビアのものを使います。
+        // こうすることで、親ビューにおいてもビヘイビアをUIオブジェクトに適用できます。
         var ui = _.extend({}, viewUI, behaviorUI);
 
-        // Normalize behavior events hash to allow
-        // a user to use the @ui. syntax.
+        // ビヘイビアのイベント定義において、
+        // `@ui.elementName`といった記述を可能にします。
         behaviorEvents = Marionette.normalizeUIKeys(behaviorEvents, ui);
 
         _.each(_.keys(behaviorEvents), function(key) {
-          // append white-space at the end of each key to prevent behavior key collisions
-          // this is relying on the fact backbone events considers "click .foo" the same  "click .foo "
-          // starts with an array of two so the first behavior has one space
+          // キー名が衝突しないように、半角スペースをキー名の最後に付加します。
+          // これは、Backboneのイベント定義において、"click .foo"と"click .foo "が同義であることに依存しています。
+          // 最初のビヘイビアが1つ分のスペースを使っているので、ココでは2つ分のスペースを付加します。
 
-          // +2 is uses becauce new Array(1) or 0 is "" and not " "
+          // 長さ0 or 1の配列では""となるので、" "にするために+2します。
           var whitespace = (new Array(i+2)).join(" ");
           var eventKey   = key + whitespace;
           var handler    = _.isFunction(behaviorEvents[key]) ? behaviorEvents[key] : b[behaviorEvents[key]];
@@ -2434,10 +2425,9 @@ Marionette.Behaviors = (function(Marionette, _) {
 
   _.extend(Behaviors, {
 
-    // placeholder method to be extended by the user
-    // should define the object that stores the behaviors
-    // i.e.
-    //
+    // ビヘイビアを保持するオブジェクトを取得するメソッドです。
+    // ユーザーによって実装されるのを期待するプレースホルダーです。
+    // 以下は例です。
     // Marionette.Behaviors.behaviorsLookup: function() {
     //   return App.Behaviors
     // }
@@ -2445,23 +2435,20 @@ Marionette.Behaviors = (function(Marionette, _) {
       throw new Error("You must define where your behaviors are stored. See https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.behaviors.md#behaviorslookup");
     },
 
-    // Takes care of getting the behavior class
-    // given options and a key.
-    // If a user passes in options.behaviorClass
-    // default to using that. Otherwise delegate
-    // the lookup to the users behaviorsLookup implementation.
+    // ビヘイビアを取得します。
+    // `options.behaviorClass`が指定してあればソレを、
+    // そうでなければ`behaviorsLookup`で取得したものを使います。
     getBehaviorClass: function(options, key) {
       if (options.behaviorClass) {
         return options.behaviorClass;
       }
 
-      // Get behavior class can be either a flat object or a method
+      // 単一階層のオブジェクトもしくはメソッドである必要があります。
       return _.isFunction(Behaviors.behaviorsLookup) ? Behaviors.behaviorsLookup.apply(this, arguments)[key] : Behaviors.behaviorsLookup[key];
     },
 
-    // Maps over a view's behaviors. Performing
-    // a lookup on each behavior and the instantiating
-    // said behavior passing its options and view.
+    // ビューのビヘイビアをマップします。
+    // それぞれのビヘイビアをインスタンス化し、オプションとビューをを渡していきます。
     parseBehaviors: function(view, behaviors){
       return _.map(behaviors, function(options, key){
         var BehaviorClass = Behaviors.getBehaviorClass(options, key);
@@ -2469,11 +2456,8 @@ Marionette.Behaviors = (function(Marionette, _) {
       });
     },
 
-    // wrap view internal methods so that they delegate to behaviors.
-    // For example, onClose should trigger close on all of the behaviors and then close itself.
-    // i.e.
-    //
-    // view.delegateEvents = _.partial(methods.delegateEvents, view.delegateEvents, behaviors);
+    // ビューの内部メソッドをラップすることで、ビヘイビアの処理を委譲します。
+    // 例えば、onCloseはビヘイビア全てでcloseを実行し、ビュー自身のcloseを実行します。
     wrap: function(view, behaviors, methodNames) {
       _.each(methodNames, function(methodName) {
         view[methodName] = _.partial(methods[methodName], view[methodName], behaviors);
