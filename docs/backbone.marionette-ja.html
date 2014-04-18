@@ -5041,9 +5041,9 @@ resetイベントの時にはバッファを使うようにします。</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-261">&#182;</a>
               </div>
-              <p>Used for rendering a branch-leaf, hierarchical structure.
-Extends directly from CollectionView and also renders an
-an item view as <code>modelView</code>, for the top leaf</p>
+              <p>単純な親子でなく、枝葉のような階層構造を実現するときに使います。
+コレクションビューを元に実装されていて、
+<code>modelView</code>としてアイテムをトップレベルにレンダリングします。</p>
 
             </div>
             
@@ -5058,8 +5058,7 @@ an item view as <code>modelView</code>, for the top leaf</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-262">&#182;</a>
               </div>
-              <p>Setting up the inheritance chain which allows changes to
-Marionette.CollectionView.prototype.constructor which allows overriding</p>
+              <p>オーバーライド可能なMarionette.CollectionView.prototype.constructorを変更できるようにします。</p>
 
             </div>
             
@@ -5076,9 +5075,8 @@ Marionette.CollectionView.prototype.constructor which allows overriding</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-263">&#182;</a>
               </div>
-              <p>Configured the initial events that the composite view
-binds to. Override this method to prevent the initial
-events, or to add your own initial events.</p>
+              <p>コンポジットビューにバインドする初期イベントを定義します。
+オーバーライドすることで、独自のイベントをバインドすることもできます。</p>
 
             </div>
             
@@ -5093,8 +5091,8 @@ events, or to add your own initial events.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-264">&#182;</a>
               </div>
-              <p>Bind only after composite view is rendered to avoid adding child views
-to nonexistent itemViewContainer</p>
+              <p>コンポジットビューがレンダリングされた後でのみイベントをバインドします。
+その持点で存在しないitemViewContainerにビューを追加しないようにするためです。</p>
 
             </div>
             
@@ -5117,10 +5115,9 @@ to nonexistent itemViewContainer</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-265">&#182;</a>
               </div>
-              <p>Retrieve the <code>itemView</code> to be used when rendering each of
-the items in the collection. The default is to return
-<code>this.itemView</code> or Marionette.CompositeView if no <code>itemView</code>
-has been defined</p>
+              <p>コレクション内のアイテムをレンダリングする際に、<code>itemView</code>を取得します。
+<code>itemView</code>が定義されていなかった場合、
+デフォルトでは、<code>this.itemView</code>か<code>Marionette.CompositeView</code>を返します。</p>
 
             </div>
             
@@ -5143,9 +5140,8 @@ has been defined</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-266">&#182;</a>
               </div>
-              <p>Serialize the collection for the view.
-You can override the <code>serializeData</code> method in your own view
-definition, to provide custom serialization for your view’s data.</p>
+              <p>コレクションをビュー用にシリアライズします。
+このメソッドをオーバーライドすることで、独自の<code>serializeData</code>を実装することもできます。</p>
 
             </div>
             
@@ -5170,7 +5166,10 @@ definition, to provide custom serialization for your view’s data.</p>
               </div>
               <p>Renders the model once, and the collection once. Calling
 this again will tell the model’s view to re-render itself
-but the collection will not re-render.</p>
+but the collection will not re-render.
+モデルとコレクションを1度だけ使いレンダリングします。
+再度実行された場合は、モデルのビューのみ再レンダリングしますが、
+コレクションに対しては行いません。</p>
 
             </div>
             
@@ -5192,9 +5191,8 @@ but the collection will not re-render.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-268">&#182;</a>
               </div>
-              <p>the ui bindings is done here and not at the end of render since they
-will not be available until after the model is rendered, but should be
-available before the collection is rendered.</p>
+              <p>UIのバインディングはココ行います。
+さもないと、コレクションが全てレンダリングされるまで利用できないからです。</p>
 
             </div>
             
@@ -5225,9 +5223,7 @@ available before the collection is rendered.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-269">&#182;</a>
               </div>
-              <p>Render an individual model, if we have one, as
-part of a composite view (branch / leaf). For example:
-a treeview.</p>
+              <p>コンポジットビューのいち部分として、各モデルをレンダリングします。</p>
 
             </div>
             
@@ -5249,7 +5245,7 @@ a treeview.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-270">&#182;</a>
               </div>
-              <p>You might need to override this if you’ve overridden appendHtml</p>
+              <p><code>appendHtml</code>をオーバーライドする際は、一緒にオーバーライドします。</p>
 
             </div>
             
@@ -5267,10 +5263,9 @@ a treeview.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-271">&#182;</a>
               </div>
-              <p>Appends the <code>el</code> of itemView instances to the specified
-<code>itemViewContainer</code> (a jQuery selector). Override this method to
-provide custom logic of how the child item view instances have their
-HTML appended to the composite view instance.</p>
+              <p><code>itemViewContainer</code>に対して、itemViewのインスタンスの<code>el</code>を追加します。
+子となるアイテム達をDOMに組み込む挙動を変えたい場合は、
+このメソッドをオーバーライドします。</p>
 
             </div>
             
@@ -5290,8 +5285,8 @@ HTML appended to the composite view instance.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-272">&#182;</a>
               </div>
-              <p>If we’ve already rendered the main collection, just
-append the new items directly into the element.</p>
+              <p>コレクションのレンダリングを終えていた場合は、
+直接要素をDOMに組み込みます。</p>
 
             </div>
             
@@ -5309,8 +5304,7 @@ append the new items directly into the element.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-273">&#182;</a>
               </div>
-              <p>Internal method to ensure an <code>$itemViewContainer</code> exists, for the
-<code>appendHtml</code> method to use.</p>
+              <p><code>appendHtml</code>の前に、<code>$itemViewContainer</code>の存在を保証する内部メソッドです。</p>
 
             </div>
             
@@ -5352,7 +5346,7 @@ append the new items directly into the element.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-274">&#182;</a>
               </div>
-              <p>Internal method to reset the <code>$itemViewContainer</code> on render</p>
+              <p>レンダリング時、<code>$itemViewContainer</code>をリセットする内部メソッドです。</p>
 
             </div>
             

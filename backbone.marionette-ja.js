@@ -1963,24 +1963,22 @@ Marionette.CollectionView = Marionette.View.extend({
 // Composite View
 // --------------
 
-// Used for rendering a branch-leaf, hierarchical structure.
-// Extends directly from CollectionView and also renders an
-// an item view as `modelView`, for the top leaf
+// 単純な親子でなく、枝葉のような階層構造を実現するときに使います。
+// コレクションビューを元に実装されていて、
+// `modelView`としてアイテムをトップレベルにレンダリングします。
 Marionette.CompositeView = Marionette.CollectionView.extend({
 
-  // Setting up the inheritance chain which allows changes to
-  // Marionette.CollectionView.prototype.constructor which allows overriding
+  // オーバーライド可能なMarionette.CollectionView.prototype.constructorを変更できるようにします。
   constructor: function(){
     Marionette.CollectionView.prototype.constructor.apply(this, arguments);
   },
 
-  // Configured the initial events that the composite view
-  // binds to. Override this method to prevent the initial
-  // events, or to add your own initial events.
+  // コンポジットビューにバインドする初期イベントを定義します。
+  // オーバーライドすることで、独自のイベントをバインドすることもできます。
   _initialEvents: function(){
 
-    // Bind only after composite view is rendered to avoid adding child views
-    // to nonexistent itemViewContainer
+    // コンポジットビューがレンダリングされた後でのみイベントをバインドします。
+    // その持点で存在しないitemViewContainerにビューを追加しないようにするためです。
     this.once('render', function () {
       if (this.collection){
         this.listenTo(this.collection, "add", this.addChildView);
@@ -1991,10 +1989,9 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
 
   },
 
-  // Retrieve the `itemView` to be used when rendering each of
-  // the items in the collection. The default is to return
-  // `this.itemView` or Marionette.CompositeView if no `itemView`
-  // has been defined
+  // コレクション内のアイテムをレンダリングする際に、`itemView`を取得します。
+  // `itemView`が定義されていなかった場合、
+  // デフォルトでは、`this.itemView`か`Marionette.CompositeView`を返します。
   getItemView: function(item){
     var itemView = Marionette.getOption(this, "itemView") || this.constructor;
 
@@ -2005,9 +2002,8 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     return itemView;
   },
 
-  // Serialize the collection for the view.
-  // You can override the `serializeData` method in your own view
-  // definition, to provide custom serialization for your view's data.
+  // コレクションをビュー用にシリアライズします。
+  // このメソッドをオーバーライドすることで、独自の`serializeData`を実装することもできます。
   serializeData: function(){
     var data = {};
 
@@ -2021,6 +2017,9 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   // Renders the model once, and the collection once. Calling
   // this again will tell the model's view to re-render itself
   // but the collection will not re-render.
+  // モデルとコレクションを1度だけ使いレンダリングします。
+  // 再度実行された場合は、モデルのビューのみ再レンダリングしますが、
+  // コレクションに対しては行いません。
   render: function(){
     this.isRendered = true;
     this.isClosed = false;
@@ -2029,9 +2028,8 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     this.triggerBeforeRender();
     var html = this.renderModel();
     this.$el.html(html);
-    // the ui bindings is done here and not at the end of render since they
-    // will not be available until after the model is rendered, but should be
-    // available before the collection is rendered.
+    // UIのバインディングはココ行います。
+    // さもないと、コレクションが全てレンダリングされるまで利用できないからです。
     this.bindUIElements();
     this.triggerMethod("composite:model:rendered");
 
@@ -2050,9 +2048,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     }
   },
 
-  // Render an individual model, if we have one, as
-  // part of a composite view (branch / leaf). For example:
-  // a treeview.
+  // コンポジットビューのいち部分として、各モデルをレンダリングします。
   renderModel: function(){
     var data = {};
     data = this.serializeData();
@@ -2063,31 +2059,29 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
   },
 
 
-  // You might need to override this if you've overridden appendHtml
+  // `appendHtml`をオーバーライドする際は、一緒にオーバーライドします。
   appendBuffer: function(compositeView, buffer) {
     var $container = this.getItemViewContainer(compositeView);
     $container.append(buffer);
   },
 
-  // Appends the `el` of itemView instances to the specified
-  // `itemViewContainer` (a jQuery selector). Override this method to
-  // provide custom logic of how the child item view instances have their
-  // HTML appended to the composite view instance.
+  // `itemViewContainer`に対して、itemViewのインスタンスの`el`を追加します。
+  // 子となるアイテム達をDOMに組み込む挙動を変えたい場合は、
+  // このメソッドをオーバーライドします。
   appendHtml: function(compositeView, itemView, index){
     if (compositeView.isBuffering) {
       compositeView.elBuffer.appendChild(itemView.el);
       compositeView._bufferedChildren.push(itemView);
     }
     else {
-      // If we've already rendered the main collection, just
-      // append the new items directly into the element.
+      // コレクションのレンダリングを終えていた場合は、
+      // 直接要素をDOMに組み込みます。
       var $container = this.getItemViewContainer(compositeView);
       $container.append(itemView.el);
     }
   },
 
-  // Internal method to ensure an `$itemViewContainer` exists, for the
-  // `appendHtml` method to use.
+  // `appendHtml`の前に、`$itemViewContainer`の存在を保証する内部メソッドです。
   getItemViewContainer: function(containerView){
     if ("$itemViewContainer" in containerView){
       return containerView.$itemViewContainer;
@@ -2117,7 +2111,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     return container;
   },
 
-  // Internal method to reset the `$itemViewContainer` on render
+  // レンダリング時、`$itemViewContainer`をリセットする内部メソッドです。
   resetItemViewContainer: function(){
     if (this.$itemViewContainer){
       delete this.$itemViewContainer;
