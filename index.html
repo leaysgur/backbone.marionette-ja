@@ -6182,29 +6182,13 @@ Marionette.Behaviors.behaviorsLookup: function() {
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-314">&#182;</a>
               </div>
-              
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-315">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-315">&#182;</a>
-              </div>
-              <p>Reduce the boilerplate code of handling route events
-and then calling a single method on another object.
-Have your routers configured to call the method on
-your object, directly.</p>
-<p>Configure an AppRouter with <code>appRoutes</code>.</p>
-<p>App routers can only take one <code>controller</code> object.
-It is recommended that you divide your controller
-objects in to smaller pieces of related functionality
-and have multiple routers / controllers, instead of
-just one giant router and controller.</p>
-<p>You can also add standard routes to an AppRouter.</p>
+              <p>ルートをハンドリングして、異なるオブジェクトのとあるメソッドを実行する・・、
+そのようなコードを減らすのがAppRouterです。
+<code>appRoutes</code>で、指定したオブジェクトのメソッドを直接指定できるようになっています。</p>
+<p>コレは、<code>controller</code>というオブジェクトのみを引数に取るようになっています。
+1つの巨大なルーターとコントローラーが出来上がるより、
+適切な単位で分割することを推奨しているからです。</p>
+<p>もちろん、いわゆるルーターとしての使い方も可能です。</p>
 
             </div>
             
@@ -6225,14 +6209,14 @@ Marionette.AppRouter = Backbone.Router.extend({
         </li>
         
         
-        <li id="section-316">
+        <li id="section-315">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-316">&#182;</a>
+                <a class="pilcrow" href="#section-315">&#182;</a>
               </div>
-              <p>Similar to route method on a Backbone Router but
-method is called on the controller</p>
+              <p>Backbone.Routerの<code>route</code>に似ていますが、
+こちらは指定したコントローラーのメソッドを実行します。</p>
 
             </div>
             
@@ -6244,18 +6228,32 @@ method is called on the controller</p>
         </li>
         
         
+        <li id="section-316">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-316">&#182;</a>
+              </div>
+              <p>該当するイベントをトリガーし、onRouteを発火します。</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  _processOnRoute: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(routeName, routeArgs)</span>{</span></pre></div></div>
+            
+        </li>
+        
+        
         <li id="section-317">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-317">&#182;</a>
               </div>
-              <p>process the route event and trigger the onRoute
-method call, if it exists</p>
+              <p>一致するパスを探す</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  _processOnRoute: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(routeName, routeArgs)</span>{</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> routePath = _.invert(<span class="hljs-keyword">this</span>.appRoutes)[routeName];</pre></div></div>
             
         </li>
         
@@ -6266,22 +6264,7 @@ method call, if it exists</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-318">&#182;</a>
               </div>
-              <p>find the path that matched</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> routePath = _.invert(<span class="hljs-keyword">this</span>.appRoutes)[routeName];</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-319">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-319">&#182;</a>
-              </div>
-              <p>make sure an onRoute is there, and call it</p>
+              <p>inRouteがあることを確認し、実行</p>
 
             </div>
             
@@ -6293,22 +6276,34 @@ method call, if it exists</p>
         </li>
         
         
+        <li id="section-319">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-319">&#182;</a>
+              </div>
+              <p><code>appRoutes</code>の定義に従い、
+指定された<code>controller</code>で、該当するメソッドを実行する内部メソッドです。</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  processAppRoutes: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(controller, appRoutes)</span> {</span>
+    <span class="hljs-keyword">if</span> (!appRoutes){ <span class="hljs-keyword">return</span>; }</pre></div></div>
+            
+        </li>
+        
+        
         <li id="section-320">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-320">&#182;</a>
               </div>
-              <p>Internal method to process the <code>appRoutes</code> for the
-router, and turn them in to routes that trigger the
-specified method on the specified <code>controller</code>.</p>
+              <p>Backboneのルートは逆順</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  processAppRoutes: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(controller, appRoutes)</span> {</span>
-    <span class="hljs-keyword">if</span> (!appRoutes){ <span class="hljs-keyword">return</span>; }
-
-    <span class="hljs-keyword">var</span> routeNames = _.keys(appRoutes).reverse(); <span class="hljs-comment">// Backbone requires reverted order of routes</span>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> routeNames = _.keys(appRoutes).reverse();
 
     _.each(routeNames, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(route)</span> {</span>
       <span class="hljs-keyword">this</span>._addAppRoute(controller, route, appRoutes[route]);
@@ -6352,21 +6347,8 @@ specified method on the specified <code>controller</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-322">&#182;</a>
               </div>
-              
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-323">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-323">&#182;</a>
-              </div>
-              <p>Contain and manage the composite application as a whole.
-Stores and starts up <code>Region</code> objects, includes an
-event aggregator as <code>app.vent</code></p>
+              <p>いわゆるアプリケーション全体を統括します。
+<code>Region</code>オブジェクトを持ち、<code>app.vent</code>として全体用のイベントも管理します。</p>
 
             </div>
             
@@ -6388,18 +6370,35 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {</pre></div></div>
         </li>
         
         
+        <li id="section-323">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-323">&#182;</a>
+              </div>
+              <p>Backbone.Wreqr.Commandsのコマンドを実行します。</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  execute: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+    <span class="hljs-keyword">this</span>.commands.execute.apply(<span class="hljs-keyword">this</span>.commands, <span class="hljs-built_in">arguments</span>);
+  },</pre></div></div>
+            
+        </li>
+        
+        
         <li id="section-324">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-324">&#182;</a>
               </div>
-              <p>Command execution, facilitated by Backbone.Wreqr.Commands</p>
+              <p>Backbone.Wreqr.RequestResponseの<code>request</code>です。</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  execute: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
-    <span class="hljs-keyword">this</span>.commands.execute.apply(<span class="hljs-keyword">this</span>.commands, <span class="hljs-built_in">arguments</span>);
+            <div class="content"><div class='highlight'><pre>  request: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.reqres.request.apply(<span class="hljs-keyword">this</span>.reqres, <span class="hljs-built_in">arguments</span>);
   },</pre></div></div>
             
         </li>
@@ -6411,12 +6410,13 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {</pre></div></div>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-325">&#182;</a>
               </div>
-              <p>Request/response, facilitated by Backbone.Wreqr.RequestResponse</p>
+              <p><code>start</code>メソッドが呼ばれた時に実行される初期化メソッドを追加します。
+<code>start</code>メソッドが呼ばれた後で追加されたものは、即実行されます。</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  request: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.reqres.request.apply(<span class="hljs-keyword">this</span>.reqres, <span class="hljs-built_in">arguments</span>);
+            <div class="content"><div class='highlight'><pre>  addInitializer: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(initializer)</span>{</span>
+    <span class="hljs-keyword">this</span>._initCallbacks.add(initializer);
   },</pre></div></div>
             
         </li>
@@ -6428,28 +6428,8 @@ _.extend(Marionette.Application.prototype, Backbone.Events, {</pre></div></div>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-326">&#182;</a>
               </div>
-              <p>Add an initializer that is either run at when the <code>start</code>
-method is called, or run immediately if added after <code>start</code>
-has already been called.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  addInitializer: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(initializer)</span>{</span>
-    <span class="hljs-keyword">this</span>._initCallbacks.add(initializer);
-  },</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-327">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-327">&#182;</a>
-              </div>
-              <p>kick off all of the application’s processes.
-initializes all of the regions that have been added
-to the app, and runs all of the initializer functions</p>
+              <p>アプリケーションを起動します。
+追加された全てのリージョンの初期化メソッドを実行します。</p>
 
             </div>
             
@@ -6464,14 +6444,14 @@ to the app, and runs all of the initializer functions</p>
         </li>
         
         
-        <li id="section-328">
+        <li id="section-327">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-328">&#182;</a>
+                <a class="pilcrow" href="#section-327">&#182;</a>
               </div>
-              <p>Add regions to your app.
-Accepts a hash of named strings or Region objects
+              <p>アプリケーションにリージョンを追加します。
+以下の2パターンの使い方ができます。
 addRegions({something: “#someRegion”})
 addRegions({something: Region.extend({el: “#someRegion”}) });</p>
 
@@ -6484,18 +6464,35 @@ addRegions({something: Region.extend({el: “#someRegion”}) });</p>
         </li>
         
         
+        <li id="section-328">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-328">&#182;</a>
+              </div>
+              <p>リージョンを全て閉じますが、削除はしません。</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  closeRegions: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+    <span class="hljs-keyword">this</span>._regionManager.closeRegions();
+  },</pre></div></div>
+            
+        </li>
+        
+        
         <li id="section-329">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-329">&#182;</a>
               </div>
-              <p>Close all regions in the app, without removing them</p>
+              <p>リージョン名を指定して、そのリージョンを削除します。</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  closeRegions: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
-    <span class="hljs-keyword">this</span>._regionManager.closeRegions();
+            <div class="content"><div class='highlight'><pre>  removeRegion: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(region)</span> {</span>
+    <span class="hljs-keyword">this</span>._regionManager.removeRegion(region);
   },</pre></div></div>
             
         </li>
@@ -6507,14 +6504,12 @@ addRegions({something: Region.extend({el: “#someRegion”}) });</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-330">&#182;</a>
               </div>
-              <p>Removes a region from your app, by name
-Accepts the regions name
-removeRegion(‘myRegion’)</p>
+              <p>リージョン名を指定して、そのリージョンを取得します。</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  removeRegion: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(region)</span> {</span>
-    <span class="hljs-keyword">this</span>._regionManager.removeRegion(region);
+            <div class="content"><div class='highlight'><pre>  getRegion: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(region)</span> {</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._regionManager.get(region);
   },</pre></div></div>
             
         </li>
@@ -6526,15 +6521,11 @@ removeRegion(‘myRegion’)</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-331">&#182;</a>
               </div>
-              <p>Provides alternative access to regions
-Accepts the region name
-getRegion(‘main’)</p>
+              <p>アプリケーションに紐付けるモジュールを作成します。</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  getRegion: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(region)</span> {</span>
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._regionManager.get(region);
-  },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  module: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(moduleNames, moduleDefinition)</span>{</span></pre></div></div>
             
         </li>
         
@@ -6545,11 +6536,11 @@ getRegion(‘main’)</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-332">&#182;</a>
               </div>
-              <p>Create a module, attached to the application</p>
+              <p>既にモジュールクラスが定義されていればそれを使います。</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  module: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(moduleNames, moduleDefinition)</span>{</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> ModuleClass = Marionette.Module.getClass(moduleDefinition);</pre></div></div>
             
         </li>
         
@@ -6560,11 +6551,12 @@ getRegion(‘main’)</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-333">&#182;</a>
               </div>
-              <p>Overwrite the module class if the user specifies one</p>
+              <p>引数の先頭に、アプリケーション自身を入れ込みます。</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> ModuleClass = Marionette.Module.getClass(moduleDefinition);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> args = slice.call(<span class="hljs-built_in">arguments</span>);
+    args.unshift(<span class="hljs-keyword">this</span>);</pre></div></div>
             
         </li>
         
@@ -6575,13 +6567,12 @@ getRegion(‘main’)</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-334">&#182;</a>
               </div>
-              <p>slice the args, and add this application object as the
-first argument of the array</p>
+              <p>詳しくは、Marionette.Moduleのコードを参照してください。</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> args = slice.call(<span class="hljs-built_in">arguments</span>);
-    args.unshift(<span class="hljs-keyword">this</span>);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">return</span> ModuleClass.create.apply(ModuleClass, args);
+  },</pre></div></div>
             
         </li>
         
@@ -6592,23 +6583,7 @@ first argument of the array</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-335">&#182;</a>
               </div>
-              <p>see the Marionette.Module object for more information</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">return</span> ModuleClass.create.apply(ModuleClass, args);
-  },</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-336">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-336">&#182;</a>
-              </div>
-              <p>Internal method to set up the region manager</p>
+              <p>リージョンマネージャーを起動する内部メソッドです。</p>
 
             </div>
             
@@ -6628,17 +6603,30 @@ first argument of the array</p>
         </li>
         
         
+        <li id="section-336">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-336">&#182;</a>
+              </div>
+              <p>Backboneの<code>extend</code>を継承</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Marionette.Application.extend = Marionette.extend;</pre></div></div>
+            
+        </li>
+        
+        
         <li id="section-337">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-337">&#182;</a>
               </div>
-              <p>Copy the <code>extend</code> function used by Backbone’s classes</p>
+              <h2 id="module">Module</h2>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>Marionette.Application.extend = Marionette.extend;</pre></div></div>
             
         </li>
         
@@ -6648,31 +6636,6 @@ first argument of the array</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-338">&#182;</a>
-              </div>
-              <h2 id="module">Module</h2>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-339">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-339">&#182;</a>
-              </div>
-              
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-340">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-340">&#182;</a>
               </div>
               <p>A simple module system, used to create privacy and encapsulation in
 Marionette applications</p>
@@ -6686,11 +6649,11 @@ Marionette applications</p>
         </li>
         
         
-        <li id="section-341">
+        <li id="section-339">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-341">&#182;</a>
+                <a class="pilcrow" href="#section-339">&#182;</a>
               </div>
               <p>Allow for a user to overide the initialize
 for a given module instance.</p>
@@ -6702,11 +6665,11 @@ for a given module instance.</p>
         </li>
         
         
-        <li id="section-342">
+        <li id="section-340">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-342">&#182;</a>
+                <a class="pilcrow" href="#section-340">&#182;</a>
               </div>
               <p>Set up an internal store for sub-modules.</p>
 
@@ -6719,11 +6682,11 @@ for a given module instance.</p>
         </li>
         
         
-        <li id="section-343">
+        <li id="section-341">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-343">&#182;</a>
+                <a class="pilcrow" href="#section-341">&#182;</a>
               </div>
               <p>Set an internal reference to the app
 within a module.</p>
@@ -6735,11 +6698,11 @@ within a module.</p>
         </li>
         
         
-        <li id="section-344">
+        <li id="section-342">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-344">&#182;</a>
+                <a class="pilcrow" href="#section-342">&#182;</a>
               </div>
               <p>By default modules start with their parents.</p>
 
@@ -6750,11 +6713,11 @@ within a module.</p>
         </li>
         
         
-        <li id="section-345">
+        <li id="section-343">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-345">&#182;</a>
+                <a class="pilcrow" href="#section-343">&#182;</a>
               </div>
               <p>Setup a proxy to the trigger method implementation.</p>
 
@@ -6772,11 +6735,11 @@ Marionette.Module.extend = Marionette.extend;</pre></div></div>
         </li>
         
         
-        <li id="section-346">
+        <li id="section-344">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-346">&#182;</a>
+                <a class="pilcrow" href="#section-344">&#182;</a>
               </div>
               <p>Extend the Module prototype with events / listenTo, so that the module
 can be used as an event aggregator or pub/sub.</p>
@@ -6788,11 +6751,11 @@ can be used as an event aggregator or pub/sub.</p>
         </li>
         
         
-        <li id="section-347">
+        <li id="section-345">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-347">&#182;</a>
+                <a class="pilcrow" href="#section-345">&#182;</a>
               </div>
               <p>Initialize is an empty function by default. Override it with your own
 initialization logic when extending Marionette.Module.</p>
@@ -6804,11 +6767,11 @@ initialization logic when extending Marionette.Module.</p>
         </li>
         
         
-        <li id="section-348">
+        <li id="section-346">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-348">&#182;</a>
+                <a class="pilcrow" href="#section-346">&#182;</a>
               </div>
               <p>Initializer for a specific module. Initializers are run when the
 module’s <code>start</code> method is called.</p>
@@ -6822,11 +6785,11 @@ module’s <code>start</code> method is called.</p>
         </li>
         
         
-        <li id="section-349">
+        <li id="section-347">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-349">&#182;</a>
+                <a class="pilcrow" href="#section-347">&#182;</a>
               </div>
               <p>Finalizers are run when a module is stopped. They are used to teardown
 and finalize any variables, references, events and other code that the
@@ -6841,11 +6804,11 @@ module had set up.</p>
         </li>
         
         
-        <li id="section-350">
+        <li id="section-348">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-350">&#182;</a>
+                <a class="pilcrow" href="#section-348">&#182;</a>
               </div>
               <p>Start the module, and run all of its initializers</p>
 
@@ -6856,11 +6819,11 @@ module had set up.</p>
         </li>
         
         
-        <li id="section-351">
+        <li id="section-349">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-351">&#182;</a>
+                <a class="pilcrow" href="#section-349">&#182;</a>
               </div>
               <p>Prevent re-starting a module that is already started</p>
 
@@ -6871,11 +6834,11 @@ module had set up.</p>
         </li>
         
         
-        <li id="section-352">
+        <li id="section-350">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-352">&#182;</a>
+                <a class="pilcrow" href="#section-350">&#182;</a>
               </div>
               <p>start the sub-modules (depth-first hierarchy)</p>
 
@@ -6886,11 +6849,11 @@ module had set up.</p>
         </li>
         
         
-        <li id="section-353">
+        <li id="section-351">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-353">&#182;</a>
+                <a class="pilcrow" href="#section-351">&#182;</a>
               </div>
               <p>check to see if we should start the sub-module with this parent</p>
 
@@ -6904,11 +6867,11 @@ module had set up.</p>
         </li>
         
         
-        <li id="section-354">
+        <li id="section-352">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-354">&#182;</a>
+                <a class="pilcrow" href="#section-352">&#182;</a>
               </div>
               <p>run the callbacks to “start” the current module</p>
 
@@ -6925,11 +6888,11 @@ module had set up.</p>
         </li>
         
         
-        <li id="section-355">
+        <li id="section-353">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-355">&#182;</a>
+                <a class="pilcrow" href="#section-353">&#182;</a>
               </div>
               <p>Stop this module by running its finalizers and then stop all of
 the sub-modules for this module</p>
@@ -6941,11 +6904,11 @@ the sub-modules for this module</p>
         </li>
         
         
-        <li id="section-356">
+        <li id="section-354">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-356">&#182;</a>
+                <a class="pilcrow" href="#section-354">&#182;</a>
               </div>
               <p>if we are not initialized, don’t bother finalizing</p>
 
@@ -6959,11 +6922,11 @@ the sub-modules for this module</p>
         </li>
         
         
-        <li id="section-357">
+        <li id="section-355">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-357">&#182;</a>
+                <a class="pilcrow" href="#section-355">&#182;</a>
               </div>
               <p>stop the sub-modules; depth-first, to make sure the
 sub-modules are stopped / finalized before parents</p>
@@ -6975,11 +6938,11 @@ sub-modules are stopped / finalized before parents</p>
         </li>
         
         
-        <li id="section-358">
+        <li id="section-356">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-358">&#182;</a>
+                <a class="pilcrow" href="#section-356">&#182;</a>
               </div>
               <p>run the finalizers</p>
 
@@ -6990,11 +6953,11 @@ sub-modules are stopped / finalized before parents</p>
         </li>
         
         
-        <li id="section-359">
+        <li id="section-357">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-359">&#182;</a>
+                <a class="pilcrow" href="#section-357">&#182;</a>
               </div>
               <p>reset the initializers and finalizers</p>
 
@@ -7009,11 +6972,11 @@ sub-modules are stopped / finalized before parents</p>
         </li>
         
         
-        <li id="section-360">
+        <li id="section-358">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-360">&#182;</a>
+                <a class="pilcrow" href="#section-358">&#182;</a>
               </div>
               <p>Configure the module with a definition function and any custom args
 that are to be passed in to the definition function</p>
@@ -7027,11 +6990,11 @@ that are to be passed in to the definition function</p>
         </li>
         
         
-        <li id="section-361">
+        <li id="section-359">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-361">&#182;</a>
+                <a class="pilcrow" href="#section-359">&#182;</a>
               </div>
               <p>Internal method: run the module definition function with the correct
 arguments</p>
@@ -7043,11 +7006,11 @@ arguments</p>
         </li>
         
         
-        <li id="section-362">
+        <li id="section-360">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-362">&#182;</a>
+                <a class="pilcrow" href="#section-360">&#182;</a>
               </div>
               <p>If there is no definition short circut the method.</p>
 
@@ -7058,11 +7021,11 @@ arguments</p>
         </li>
         
         
-        <li id="section-363">
+        <li id="section-361">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-363">&#182;</a>
+                <a class="pilcrow" href="#section-361">&#182;</a>
               </div>
               <p>build the correct list of arguments for the module definition</p>
 
@@ -7083,11 +7046,11 @@ arguments</p>
         </li>
         
         
-        <li id="section-364">
+        <li id="section-362">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-364">&#182;</a>
+                <a class="pilcrow" href="#section-362">&#182;</a>
               </div>
               <p>Internal method: set up new copies of initializers and finalizers.
 Calling this method will wipe out all existing initializers and
@@ -7104,11 +7067,11 @@ finalizers.</p>
         </li>
         
         
-        <li id="section-365">
+        <li id="section-363">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-365">&#182;</a>
+                <a class="pilcrow" href="#section-363">&#182;</a>
               </div>
               <p>Type methods to create modules</p>
 
@@ -7119,11 +7082,11 @@ finalizers.</p>
         </li>
         
         
-        <li id="section-366">
+        <li id="section-364">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-366">&#182;</a>
+                <a class="pilcrow" href="#section-364">&#182;</a>
               </div>
               <p>Create a module, hanging off the app parameter as the parent object.</p>
 
@@ -7135,11 +7098,11 @@ finalizers.</p>
         </li>
         
         
-        <li id="section-367">
+        <li id="section-365">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-367">&#182;</a>
+                <a class="pilcrow" href="#section-365">&#182;</a>
               </div>
               <p>get the custom args passed in after the module definition and
 get rid of the module name and definition function</p>
@@ -7152,11 +7115,11 @@ get rid of the module name and definition function</p>
         </li>
         
         
-        <li id="section-368">
+        <li id="section-366">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-368">&#182;</a>
+                <a class="pilcrow" href="#section-366">&#182;</a>
               </div>
               <p>Split the module names and get the number of submodules.
 i.e. an example module name of <code>Doge.Wow.Amaze</code> would
@@ -7170,11 +7133,11 @@ then have the potential for 3 module definitions.</p>
         </li>
         
         
-        <li id="section-369">
+        <li id="section-367">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-369">&#182;</a>
+                <a class="pilcrow" href="#section-367">&#182;</a>
               </div>
               <p>store the module definition for the last module in the chain</p>
 
@@ -7186,11 +7149,11 @@ then have the potential for 3 module definitions.</p>
         </li>
         
         
-        <li id="section-370">
+        <li id="section-368">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-370">&#182;</a>
+                <a class="pilcrow" href="#section-368">&#182;</a>
               </div>
               <p>Loop through all the parts of the module definition</p>
 
@@ -7205,11 +7168,11 @@ then have the potential for 3 module definitions.</p>
         </li>
         
         
-        <li id="section-371">
+        <li id="section-369">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-371">&#182;</a>
+                <a class="pilcrow" href="#section-369">&#182;</a>
               </div>
               <p>Return the last module in the definition chain</p>
 
@@ -7225,11 +7188,11 @@ then have the potential for 3 module definitions.</p>
         </li>
         
         
-        <li id="section-372">
+        <li id="section-370">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-372">&#182;</a>
+                <a class="pilcrow" href="#section-370">&#182;</a>
               </div>
               <p>Get an existing module of this name if we have one</p>
 
@@ -7242,11 +7205,11 @@ then have the potential for 3 module definitions.</p>
         </li>
         
         
-        <li id="section-373">
+        <li id="section-371">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-373">&#182;</a>
+                <a class="pilcrow" href="#section-371">&#182;</a>
               </div>
               <p>Create a new module if we don’t have one</p>
 
@@ -7258,11 +7221,11 @@ then have the potential for 3 module definitions.</p>
         </li>
         
         
-        <li id="section-374">
+        <li id="section-372">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-374">&#182;</a>
+                <a class="pilcrow" href="#section-372">&#182;</a>
               </div>
               <p>store the module on the parent</p>
 
@@ -7277,11 +7240,11 @@ then have the potential for 3 module definitions.</p>
         </li>
         
         
-        <li id="section-375">
+        <li id="section-373">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-375">&#182;</a>
+                <a class="pilcrow" href="#section-373">&#182;</a>
               </div>
               <h2 id="module-classes">Module Classes</h2>
 <p>Module classes can be used as an alternative to the define pattern.
@@ -7301,11 +7264,11 @@ This allows module lifecyle events like <code>onStart</code> and <code>onStop</c
         </li>
         
         
-        <li id="section-376">
+        <li id="section-374">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-376">&#182;</a>
+                <a class="pilcrow" href="#section-374">&#182;</a>
               </div>
               <p>If all of the module’s functionality is defined inside its class,
 then the class can be passed in directly. <code>MyApp.module(&quot;Foo&quot;, FooModule)</code>.</p>
@@ -7322,11 +7285,11 @@ then the class can be passed in directly. <code>MyApp.module(&quot;Foo&quot;, Fo
         </li>
         
         
-        <li id="section-377">
+        <li id="section-375">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-377">&#182;</a>
+                <a class="pilcrow" href="#section-375">&#182;</a>
               </div>
               <p>Add the module definition and add a startWithParent initializer function.
 This is complicated because module definitions are heavily overloaded
