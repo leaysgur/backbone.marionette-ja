@@ -3091,9 +3091,9 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {</pre></div></div>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-157">&#182;</a>
               </div>
-              <p>TemplateCache object-level methods. Manage the template
-caches from these method calls instead of creating
-your own TemplateCache instances</p>
+              <p>TemplateCacheオブジェクトが保持するメソッド。
+インスタンスを作る代わりに、
+このオブジェクトでテンプレートのキャッシュを管理します。</p>
 
             </div>
             
@@ -3109,9 +3109,8 @@ your own TemplateCache instances</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-158">&#182;</a>
               </div>
-              <p>Get the specified template by id. Either
-retrieves the cached version, or loads it
-from the DOM.</p>
+              <p>idによって特定のテンプレートを取得します。
+キャッシュがあるかをまず確認し、なければDOMから取得します。</p>
 
             </div>
             
@@ -3135,12 +3134,10 @@ from the DOM.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-159">&#182;</a>
               </div>
-              <p>Clear templates from the cache. If no arguments
-are specified, clears all templates:
-<code>clear()</code></p>
-<p>If arguments are specified, clears each of the
-specified templates from the cache:
-<code>clear(&quot;#t1&quot;, &quot;#t2&quot;, &quot;...&quot;)</code></p>
+              <p>テンプレートのキャッシュをクリアします。
+引数なしに実行されると全てのテンプレートを、
+idを与えるとそれらのキャッシュをクリアします。
+<code>clear()</code>もしくは、<code>clear(&quot;#t1&quot;, &quot;#t2&quot;, &quot;...&quot;)</code>のように使います。</p>
 
             </div>
             
@@ -3168,9 +3165,8 @@ specified templates from the cache:
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-160">&#182;</a>
               </div>
-              <p>TemplateCache instance methods, allowing each
-template cache object to manage its own state
-and know whether or not it has been loaded</p>
+              <p>TemplateCacheのインスタンスメソッドです。
+これらにより、自身の状態やロード済みかどうかを知ることができます。</p>
 
             </div>
             
@@ -3185,7 +3181,7 @@ and know whether or not it has been loaded</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-161">&#182;</a>
               </div>
-              <p>Internal method to load the template</p>
+              <p>テンプレートをロードする内部メソッド</p>
 
             </div>
             
@@ -3200,7 +3196,7 @@ and know whether or not it has been loaded</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-162">&#182;</a>
               </div>
-              <p>Guard clause to prevent loading this template more than once</p>
+              <p>多重に読み込まれるのを防止</p>
 
             </div>
             
@@ -3217,7 +3213,7 @@ and know whether or not it has been loaded</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-163">&#182;</a>
               </div>
-              <p>Load the template and compile it</p>
+              <p>テンプレートをロードしてコンパイル</p>
 
             </div>
             
@@ -3236,10 +3232,9 @@ and know whether or not it has been loaded</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-164">&#182;</a>
               </div>
-              <p>Load a template from the DOM, by default. Override
-this method to provide your own template retrieval
-For asynchronous loading with AMD/RequireJS, consider
-using a template-loader plugin as described here:
+              <p>デフォルトではDOMからテンプレートをロードします。
+テンプレート取得の挙動を変える場合は、このメソッドをオーバーライドします。
+AMD/RequireJSの非同期読み込みや、以下のようなプラグインを使う場合です。
 <a href="https://github.com/marionettejs/backbone.marionette/wiki/Using-marionette-with-requirejs">https://github.com/marionettejs/backbone.marionette/wiki/Using-marionette-with-requirejs</a></p>
 
             </div>
@@ -3263,10 +3258,9 @@ using a template-loader plugin as described here:
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-165">&#182;</a>
               </div>
-              <p>Pre-compile the template before caching it. Override
-this method if you do not need to pre-compile a template
-(JST / RequireJS for example) or if you want to change
-the template engine used (Handebars, etc).</p>
+              <p>キャッシュする前に、テンプレートをコンパイルします。
+Handlebars等のテンプレートエンジンを使いたい場合や、
+プリコンパイルの必要がない場合には、このメソッドをオーバーライドします。</p>
 
             </div>
             
@@ -3309,8 +3303,7 @@ the template engine used (Handebars, etc).</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-168">&#182;</a>
               </div>
-              <p>Render a template with data by passing in the template
-selector and the data to render.</p>
+              <p>与えられたデータとテンプレートを使ってレンダリングします。</p>
 
             </div>
             
@@ -3325,10 +3318,9 @@ selector and the data to render.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-169">&#182;</a>
               </div>
-              <p>Render a template with data. The <code>template</code> parameter is
-passed to the <code>TemplateCache</code> object to retrieve the
-template function. Override this method to provide your own
-custom rendering and template handling for all of Marionette.</p>
+              <p>データを使ってテンプレートをレンダリングします。
+<code>template</code>の引数は、<code>TemplateCache</code>オブジェクトへ渡ります。
+レンダリングとテンプレートの管理を独自にやる場合は、このメソッドをオーバーライドします。</p>
 
             </div>
             
@@ -3383,7 +3375,7 @@ custom rendering and template handling for all of Marionette.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-172">&#182;</a>
               </div>
-              <p>The core view type that other Marionette views extend from.</p>
+              <p>Marionetteビューの元となるビュータイプを定義します。</p>
 
             </div>
             
@@ -3405,10 +3397,10 @@ custom rendering and template handling for all of Marionette.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-173">&#182;</a>
               </div>
-              <p>this exposes view options to the view initializer
-this is a backfill since backbone removed the assignment
-of this.options
-at some point however this may be removed</p>
+              <p>ビューの初期化時に渡されるオプションです。
+コレはBackboneで<code>this.options</code>が使われなくなったため、
+後方互換のために実装されています。
+よって、いくつかの場面では使われないかもしれません。</p>
 
             </div>
             
@@ -3423,7 +3415,7 @@ at some point however this may be removed</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-174">&#182;</a>
               </div>
-              <p>parses out the @ui DSL for events</p>
+              <p>@ui記法をパース</p>
 
             </div>
             
@@ -3443,8 +3435,8 @@ at some point however this may be removed</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-175">&#182;</a>
               </div>
-              <p>import the “triggerMethod” to trigger events with corresponding
-methods if the method exists</p>
+              <p>メソッドが存在し、一致するイベントがあった場合に実行するため、
+“triggerMthod”をインポートします。</p>
 
             </div>
             
@@ -3459,8 +3451,8 @@ methods if the method exists</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-176">&#182;</a>
               </div>
-              <p>Imports the “normalizeMethods” to transform hashes of
-events=&gt;function references/names to a hash of events=&gt;function references</p>
+              <p>イベント名: メソッド、またはメソッド名のマップを、
+イベント名: メソッドの形に揃えて返す”normalizeMethods”をインポートします。</p>
 
             </div>
             
@@ -3475,10 +3467,9 @@ events=&gt;function references/names to a hash of events=&gt;function references
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-177">&#182;</a>
               </div>
-              <p>Get the template for this view
-instance. You can set a <code>template</code> attribute in the view
-definition or pass a <code>template: &quot;whatever&quot;</code> parameter in
-to the constructor options.</p>
+              <p>このビューのインスタンス用のテンプレートを取得します。
+ビューの定義時に<code>template</code>プロパティで設定することもできますし、
+コンストラクタへオプションとして<code>template: &quot;whatever&quot;</code>形式で渡すこともできます。</p>
 
             </div>
             
@@ -3495,11 +3486,10 @@ to the constructor options.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-178">&#182;</a>
               </div>
-              <p>Mix in template helper methods. Looks for a
-<code>templateHelpers</code> attribute, which can either be an
-object literal, or a function that returns an object
-literal. All methods and attributes from this object
-are copies to the object passed in.</p>
+              <p>テンプレートのヘルパーメソッドをミックスインします。
+オブジェクトリテラルか、オブジェクトを返すメソッドで、
+<code>templateHelpers</code>プロパティに設定します。
+設定されたものは全てコピーして渡されます。</p>
 
             </div>
             
@@ -3511,7 +3501,6 @@ are copies to the object passed in.</p>
     }
     <span class="hljs-keyword">return</span> _.extend(target, templateHelpers);
   },
-
 
   normalizeUIKeys: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(hash)</span> {</span>
     <span class="hljs-keyword">var</span> ui = _.result(<span class="hljs-keyword">this</span>, <span class="hljs-string">'ui'</span>);
@@ -3527,8 +3516,7 @@ are copies to the object passed in.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-179">&#182;</a>
               </div>
-              <p>Configure <code>triggers</code> to forward DOM events to view
-events. <code>triggers: {&quot;click .foo&quot;: &quot;do:foo&quot;}</code></p>
+              <p>トリガーの定義をDOMイベントからビューのイベントへコンバートします。</p>
 
             </div>
             
@@ -3546,7 +3534,7 @@ events. <code>triggers: {&quot;click .foo&quot;: &quot;do:foo&quot;}</code></p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-180">&#182;</a>
               </div>
-              <p>Allow <code>triggers</code> to be configured as a function</p>
+              <p><code>triggers</code>はメソッドでもOK</p>
 
             </div>
             
@@ -3561,8 +3549,7 @@ events. <code>triggers: {&quot;click .foo&quot;: &quot;do:foo&quot;}</code></p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-181">&#182;</a>
               </div>
-              <p>Configure the triggers, prevent default
-action and stop propagation of DOM events</p>
+              <p>preventDefaultやstopPropagationをトリガーにも設定します。</p>
 
             </div>
             
@@ -3580,7 +3567,7 @@ action and stop propagation of DOM events</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-182">&#182;</a>
               </div>
-              <p>build the event handler function for the DOM event</p>
+              <p>DOMイベント用にハンドラを作成</p>
 
             </div>
             
@@ -3595,7 +3582,7 @@ action and stop propagation of DOM events</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-183">&#182;</a>
               </div>
-              <p>stop the event in its tracks</p>
+              <p>イベントを抑止</p>
 
             </div>
             
@@ -3619,7 +3606,7 @@ action and stop propagation of DOM events</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-184">&#182;</a>
               </div>
-              <p>build the args for the event</p>
+              <p>イベント用に引数を作成</p>
 
             </div>
             
@@ -3638,7 +3625,7 @@ action and stop propagation of DOM events</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-185">&#182;</a>
               </div>
-              <p>trigger the event</p>
+              <p>イベント発火</p>
 
             </div>
             
@@ -3659,8 +3646,8 @@ action and stop propagation of DOM events</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-186">&#182;</a>
               </div>
-              <p>Overriding Backbone.View’s delegateEvents to handle
-the <code>triggers</code>, <code>modelEvents</code>, and <code>collectionEvents</code> configuration</p>
+              <p><code>triggers</code>、<code>modelEvents</code>、<code>collectionEvents</code>にハンドラをバインドする、
+Backbone.ViewのdelegateEventsをオーバーライドします。</p>
 
             </div>
             
@@ -3679,7 +3666,7 @@ the <code>triggers</code>, <code>modelEvents</code>, and <code>collectionEvents<
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-187">&#182;</a>
               </div>
-              <p>internal method to delegate DOM events and triggers</p>
+              <p>DOMイベントやトリガーを扱う内部メソッドです。</p>
 
             </div>
             
@@ -3698,7 +3685,7 @@ the <code>triggers</code>, <code>modelEvents</code>, and <code>collectionEvents<
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-188">&#182;</a>
               </div>
-              <p>look up if this view has behavior events</p>
+              <p>このビューがビヘイビアのイベントを持っているか確認</p>
 
             </div>
             
@@ -3714,7 +3701,7 @@ the <code>triggers</code>, <code>modelEvents</code>, and <code>collectionEvents<
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-189">&#182;</a>
               </div>
-              <p>behavior events will be overriden by view events and or triggers</p>
+              <p>ビヘイビアのイベントは、ビューのイベントとトリガーによってオーバーライドされます。</p>
 
             </div>
             
@@ -3732,8 +3719,8 @@ the <code>triggers</code>, <code>modelEvents</code>, and <code>collectionEvents<
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-190">&#182;</a>
               </div>
-              <p>Overriding Backbone.View’s undelegateEvents to handle unbinding
-the <code>triggers</code>, <code>modelEvents</code>, and <code>collectionEvents</code> config</p>
+              <p><code>triggers</code>、<code>modelEvents</code>、<code>collectionEvents</code>へのハンドラをアンバインドする、
+Backbone.ViewのundelegateEventsをオーバーライドします。</p>
 
             </div>
             
@@ -3754,7 +3741,7 @@ the <code>triggers</code>, <code>modelEvents</code>, and <code>collectionEvents<
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-191">&#182;</a>
               </div>
-              <p>Internal method, handles the <code>show</code> event.</p>
+              <p><code>show</code>イベントを扱う内部メソッド。</p>
 
             </div>
             
@@ -3769,10 +3756,9 @@ the <code>triggers</code>, <code>modelEvents</code>, and <code>collectionEvents<
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-192">&#182;</a>
               </div>
-              <p>Default <code>close</code> implementation, for removing a view from the
-DOM and unbinding it. Regions will call this method
-for you. You can specify an <code>onClose</code> method in your view to
-add custom code that is called after the view is closed.</p>
+              <p>ビューをDOMから削除し、イベントをアンバインドする<code>close</code>メソッドの実装です。
+リージョンはこのメソッドを実行します。
+<code>onClose</code>メソッドを定義することができ、それはビューが削除された直後に実行されます。</p>
 
             </div>
             
@@ -3790,8 +3776,7 @@ add custom code that is called after the view is closed.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-193">&#182;</a>
               </div>
-              <p>allow the close to be stopped by returning <code>false</code>
-from the <code>onBeforeClose</code> method</p>
+              <p><code>onBeforeClose</code>メソッドが<code>false</code>を返すことで、closeをキャンセルできます。</p>
 
             </div>
             
@@ -3809,9 +3794,8 @@ from the <code>onBeforeClose</code> method</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-194">&#182;</a>
               </div>
-              <p>mark as closed before doing the actual close, to
-prevent infinite loops within “close” event handlers
-that are trying to close other views</p>
+              <p>実際のcloseが行われるより先に、フラグをタテておきます。
+そうすることで、他のビューに関連した”close”イベントが無限ループすることを防ぎます。</p>
 
             </div>
             
@@ -3827,7 +3811,7 @@ that are trying to close other views</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-195">&#182;</a>
               </div>
-              <p>unbind UI elements</p>
+              <p>UIに紐付けられたハンドラをアンバインド</p>
 
             </div>
             
@@ -3842,7 +3826,7 @@ that are trying to close other views</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-196">&#182;</a>
               </div>
-              <p>remove the view from the DOM</p>
+              <p>DOMからビューを削除</p>
 
             </div>
             
@@ -3858,8 +3842,7 @@ that are trying to close other views</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-197">&#182;</a>
               </div>
-              <p>This method binds the elements specified in the “ui” hash inside the view’s code with
-the associated jQuery selectors.</p>
+              <p>ビューの”ui”プロパティ(中身はjQueryのセレクタ)を使い、実際にDOMをバインドします。</p>
 
             </div>
             
@@ -3875,8 +3858,9 @@ the associated jQuery selectors.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-198">&#182;</a>
               </div>
-              <p>store the ui hash in _uiBindings so they can be reset later
-and so re-rendering the view will be able to find the bindings</p>
+              <p>UIの定義を_uiBindingsへ退避。
+そうすることで後にリセットすることができ、
+レンダリングされたビューからバインドする要素を見つけることができます。</p>
 
             </div>
             
@@ -3893,7 +3877,7 @@ and so re-rendering the view will be able to find the bindings</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-199">&#182;</a>
               </div>
-              <p>get the bindings result, as a function or otherwise</p>
+              <p>メソッドなら結果、そうでないなら値をバインディング</p>
 
             </div>
             
@@ -3908,7 +3892,7 @@ and so re-rendering the view will be able to find the bindings</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-200">&#182;</a>
               </div>
-              <p>empty the ui so we don’t have anything to start with</p>
+              <p>最初は何もないように</p>
 
             </div>
             
@@ -3923,7 +3907,7 @@ and so re-rendering the view will be able to find the bindings</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-201">&#182;</a>
               </div>
-              <p>bind each of the selectors</p>
+              <p>それぞれのセレクタをバインド</p>
 
             </div>
             
@@ -3942,7 +3926,7 @@ and so re-rendering the view will be able to find the bindings</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-202">&#182;</a>
               </div>
-              <p>This method unbinds the elements specified in the “ui” hash</p>
+              <p>“ui”プロパティに定義された要素をアンバインドします。</p>
 
             </div>
             
@@ -3958,7 +3942,7 @@ and so re-rendering the view will be able to find the bindings</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-203">&#182;</a>
               </div>
-              <p>delete all of the existing ui bindings</p>
+              <p>全てのバインディングを削除</p>
 
             </div>
             
@@ -3975,7 +3959,7 @@ and so re-rendering the view will be able to find the bindings</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-204">&#182;</a>
               </div>
-              <p>reset the ui element to the original bindings configuration</p>
+              <p>UIの定義を元通りにリセット</p>
 
             </div>
             
@@ -4018,9 +4002,10 @@ and so re-rendering the view will be able to find the bindings</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-207">&#182;</a>
               </div>
-              <p>A single item view implementation that contains code for rendering
-with underscore.js templates, serializing the view’s model or collection,
-and calling several methods on extended views, such as <code>onRender</code>.</p>
+              <p>単一のアイテムを表示するビューの実装です。
+underscore.jsのテンプレートを使ってレンダリングするメソッドや、
+紐付けられたビューのモデルかコレクションのデータをシリアライズするメソッドのほか、
+<code>onRender</code>のように、ビューで拡張されたメソッドを実行することができます。</p>
 
             </div>
             
@@ -4035,8 +4020,7 @@ and calling several methods on extended views, such as <code>onRender</code>.</p
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-208">&#182;</a>
               </div>
-              <p>Setting up the inheritance chain which allows changes to
-Marionette.View.prototype.constructor which allows overriding</p>
+              <p>オーバーライド可能なMarionette.View.prototype.constructorを変更できるようにします。</p>
 
             </div>
             
@@ -4053,12 +4037,10 @@ Marionette.View.prototype.constructor which allows overriding</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-209">&#182;</a>
               </div>
-              <p>Serialize the model or collection for the view. If a model is
-found, <code>.toJSON()</code> is called. If a collection is found, <code>.toJSON()</code>
-is also called, but is used to populate an <code>items</code> array in the
-resulting data. If both are found, defaults to the model.
-You can override the <code>serializeData</code> method in your own view
-definition, to provide custom serialization for your view’s data.</p>
+              <p>紐付けられたモデル、コレクションをビュー用にシリアライズします。
+モデルが見つかった場合は<code>.toJSON()</code>を実行した結果を返し、
+コレクションがみつかった場合は、<code>items</code>という名前の配列で<code>.toJSON()</code>の結果を返します。
+このメソッドをオーバーライドすることで、独自の<code>serializeData</code>を実装することもできます。</p>
 
             </div>
             
@@ -4084,11 +4066,10 @@ definition, to provide custom serialization for your view’s data.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-210">&#182;</a>
               </div>
-              <p>Render the view, defaulting to underscore.js templates.
-You can override this in your view definition to provide
-a very specific rendering for your view. In general, though,
-you should override the <code>Marionette.Renderer</code> object to
-change how Marionette renders views.</p>
+              <p>ビューをレンダリングします。
+デフォルトでは、underscore.jsのテンプレートを使います。
+このメソッドをオーバーライドすることもできますが、
+<code>Marionette.Renderer</code>オブジェクトをオーバーライドするほうが良いです。</p>
 
             </div>
             
@@ -4122,8 +4103,8 @@ change how Marionette renders views.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-211">&#182;</a>
               </div>
-              <p>Override the default close event to add a few
-more events that are triggered.</p>
+              <p>close時のイベントをもう少し定義したい場合は、
+このメソッドをオーバーライドします。</p>
 
             </div>
             
@@ -4172,8 +4153,8 @@ more events that are triggered.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-214">&#182;</a>
               </div>
-              <p>A view that iterates over a Backbone.Collection
-and renders an individual ItemView for each model.</p>
+              <p>Backbone.Collectionをイテレートし、
+それぞれのモデルでItemViewをレンダリングします。</p>
 
             </div>
             
@@ -4188,8 +4169,7 @@ and renders an individual ItemView for each model.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-215">&#182;</a>
               </div>
-              <p>used as the prefix for item view events
-that are forwarded through the collectionview</p>
+              <p>ItemViewで使うイベント名のプレフィックス</p>
 
             </div>
             
@@ -4204,7 +4184,7 @@ that are forwarded through the collectionview</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-216">&#182;</a>
               </div>
-              <p>constructor</p>
+              <p>コンストラクタ</p>
 
             </div>
             
@@ -4226,9 +4206,8 @@ that are forwarded through the collectionview</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-217">&#182;</a>
               </div>
-              <p>Instead of inserting elements one by one into the page,
-it’s much more performant to insert elements into a document
-fragment and then insert that document fragment into the page</p>
+              <p>パフォーマンスのため、各要素を随時DOMに組み込むのではなく、
+documentFragmentを使います。</p>
 
             </div>
             
@@ -4267,8 +4246,7 @@ fragment and then insert that document fragment into the page</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-218">&#182;</a>
               </div>
-              <p>Configured the initial events that the collection view
-binds to.</p>
+              <p>コレクションビューへのイベントをバインドします。</p>
 
             </div>
             
@@ -4289,7 +4267,7 @@ binds to.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-219">&#182;</a>
               </div>
-              <p>Handle a child item added to the collection</p>
+              <p>コレクションに子となるビューを追加します。</p>
 
             </div>
             
@@ -4309,8 +4287,7 @@ binds to.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-220">&#182;</a>
               </div>
-              <p>Override from <code>Marionette.View</code> to guarantee the <code>onShow</code> method
-of child views is called.</p>
+              <p>子ビューの<code>onShow</code>が呼ばれるように、<code>Marionette.View</code>からオーバーライドします。</p>
 
             </div>
             
@@ -4329,8 +4306,7 @@ of child views is called.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-221">&#182;</a>
               </div>
-              <p>Internal method to trigger the before render callbacks
-and events</p>
+              <p>レンダリング直前のイベントとコールバックを実行する内部メソッドです。</p>
 
             </div>
             
@@ -4348,8 +4324,7 @@ and events</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-222">&#182;</a>
               </div>
-              <p>Internal method to trigger the rendered callbacks and
-events</p>
+              <p>レンダリング直後のイベントとコールバックを実行する内部メソッドです。</p>
 
             </div>
             
@@ -4367,9 +4342,8 @@ events</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-223">&#182;</a>
               </div>
-              <p>Render the collection of items. Override this method to
-provide your own implementation of a render function for
-the collection view.</p>
+              <p>コレクションをレンダリングします。
+オーバーライドすることで独自の方法でレンダリングすることもできます。</p>
 
             </div>
             
@@ -4390,9 +4364,9 @@ the collection view.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-224">&#182;</a>
               </div>
-              <p>Internal method. Separated so that CompositeView can have
-more control over events being triggered, around the rendering
-process</p>
+              <p>内部メソッドです。
+レンダリング実行の際に、CompositeViewがよりイベント駆動しやすいよう、
+分けて実装しておきます。</p>
 
             </div>
             
@@ -4420,8 +4394,7 @@ process</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-225">&#182;</a>
               </div>
-              <p>Internal method to loop through each item in the
-collection view and show it</p>
+              <p>コレクション内のそれぞれのアイテムをループし、表示する内部メソッドです。</p>
 
             </div>
             
@@ -4442,9 +4415,7 @@ collection view and show it</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-226">&#182;</a>
               </div>
-              <p>Internal method to show an empty view in place of
-a collection of item views, when the collection is
-empty</p>
+              <p>コレクションが空の時に入れておく空のビューを作る内部メソッドです。</p>
 
             </div>
             
@@ -4467,9 +4438,8 @@ empty</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-227">&#182;</a>
               </div>
-              <p>Internal method to close an existing emptyView instance
-if one exists. Called when a collection view has been
-rendered empty, and then an item is added to the collection.</p>
+              <p>空のビューのインスタンスがあれば、それを削除する内部メソッドです。
+空のコレクションビューに対して、何かアイテムが追加された時に実行されます。</p>
 
             </div>
             
@@ -4489,7 +4459,7 @@ rendered empty, and then an item is added to the collection.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-228">&#182;</a>
               </div>
-              <p>Retrieve the empty view type</p>
+              <p>空のビューのビュータイプを取得します。</p>
 
             </div>
             
@@ -4506,9 +4476,9 @@ rendered empty, and then an item is added to the collection.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-229">&#182;</a>
               </div>
-              <p>Retrieve the itemView type, either from <code>this.options.itemView</code>
-or from the <code>itemView</code> in the object definition. The “options”
-takes precedence.</p>
+              <p>アイテムビューのタイプを取得します。
+<code>this.options.itemView</code>か、<code>itemView</code>の定義から取得します。
+“options”が優先して使われます。</p>
 
             </div>
             
@@ -4531,8 +4501,7 @@ takes precedence.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-230">&#182;</a>
               </div>
-              <p>Render the child item’s view and add it to the
-HTML for the collection view.</p>
+              <p>アイテムビューを追加し、コレクションのビューとしてレンダリングします。</p>
 
             </div>
             
@@ -4547,7 +4516,7 @@ HTML for the collection view.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-231">&#182;</a>
               </div>
-              <p>get the itemViewOptions if any were specified</p>
+              <p>定義されていれば、オプションを取得</p>
 
             </div>
             
@@ -4565,7 +4534,7 @@ HTML for the collection view.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-232">&#182;</a>
               </div>
-              <p>build the view</p>
+              <p>子ビューを作成</p>
 
             </div>
             
@@ -4580,7 +4549,7 @@ HTML for the collection view.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-233">&#182;</a>
               </div>
-              <p>set up the child view event forwarding</p>
+              <p>子ビューのイベントを転送しておく</p>
 
             </div>
             
@@ -4595,7 +4564,7 @@ HTML for the collection view.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-234">&#182;</a>
               </div>
-              <p>this view is about to be added</p>
+              <p>ビューの追加予告</p>
 
             </div>
             
@@ -4610,8 +4579,7 @@ HTML for the collection view.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-235">&#182;</a>
               </div>
-              <p>Store the child view itself so we can properly
-remove and/or close it later</p>
+              <p>子ビューを格納することで、適切に削除できるようにします。</p>
 
             </div>
             
@@ -4626,7 +4594,7 @@ remove and/or close it later</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-236">&#182;</a>
               </div>
-              <p>Render it and show it</p>
+              <p>レンダリングし、表示</p>
 
             </div>
             
@@ -4641,8 +4609,7 @@ remove and/or close it later</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-237">&#182;</a>
               </div>
-              <p>call the “show” method if the collection view
-has already been shown</p>
+              <p>既に表示されていれば、”show”mメソッドを実行</p>
 
             </div>
             
@@ -4659,7 +4626,7 @@ has already been shown</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-238">&#182;</a>
               </div>
-              <p>this view was added</p>
+              <p>ビューが追加された</p>
 
             </div>
             
@@ -4677,8 +4644,8 @@ has already been shown</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-239">&#182;</a>
               </div>
-              <p>Set up the child view event forwarding. Uses an “itemview:”
-prefix in front of all forwarded events.</p>
+              <p>子ビューのイベントを引き継ぎます。
+それらのイベント名には、”itemview:”という接頭辞がつきます。</p>
 
             </div>
             
@@ -4694,8 +4661,8 @@ prefix in front of all forwarded events.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-240">&#182;</a>
               </div>
-              <p>Forward all child item view events through the parent,
-prepending “itemview:” to the event name</p>
+              <p>アイテムビューに紐づくイベントを親に転送します。
+イベント名の先頭に、”itemview:”を付加します。</p>
 
             </div>
             
@@ -4716,7 +4683,7 @@ prepending “itemview:” to the event name</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-241">&#182;</a>
               </div>
-              <p>call collectionView itemEvent if defined</p>
+              <p>itemEventが定義されていれば実行します。</p>
 
             </div>
             
@@ -4737,7 +4704,7 @@ prepending “itemview:” to the event name</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-242">&#182;</a>
               </div>
-              <p>returns the value of itemEvents depending on if a function</p>
+              <p>itemEventsを取得します。</p>
 
             </div>
             
@@ -4758,7 +4725,7 @@ prepending “itemview:” to the event name</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-243">&#182;</a>
               </div>
-              <p>render the item view</p>
+              <p>アイテムビューをレンダリングします。</p>
 
             </div>
             
@@ -4776,7 +4743,7 @@ prepending “itemview:” to the event name</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-244">&#182;</a>
               </div>
-              <p>Build an <code>itemView</code> for every model in the collection.</p>
+              <p>コレクションの内の各モデルに対し、<code>itemView</code>を作成します。</p>
 
             </div>
             
@@ -4794,7 +4761,7 @@ prepending “itemview:” to the event name</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-245">&#182;</a>
               </div>
-              <p>get the child view by item it holds, and remove it</p>
+              <p>アイテムからビューを取得し、削除します。</p>
 
             </div>
             
@@ -4813,7 +4780,7 @@ prepending “itemview:” to the event name</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-246">&#182;</a>
               </div>
-              <p>Remove the child view and close it</p>
+              <p>子ビューを削除します。</p>
 
             </div>
             
@@ -4828,8 +4795,8 @@ prepending “itemview:” to the event name</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-247">&#182;</a>
               </div>
-              <p>shut down the child view properly,
-including events that the collection has from it</p>
+              <p>適切に子ビューを削除します。
+貼られていたハンドラも同じく削除します。</p>
 
             </div>
             
@@ -4844,7 +4811,7 @@ including events that the collection has from it</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-248">&#182;</a>
               </div>
-              <p>call ‘close’ or ‘remove’, depending on which is found</p>
+              <p><code>close</code>か<code>remove</code>か、見つかったほうを実行</p>
 
             </div>
             
@@ -4867,7 +4834,7 @@ including events that the collection has from it</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-249">&#182;</a>
               </div>
-              <p>helper to check if the collection is empty</p>
+              <p>コレクションが空かどうかをチェックするヘルパーです。</p>
 
             </div>
             
@@ -4882,7 +4849,7 @@ including events that the collection has from it</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-250">&#182;</a>
               </div>
-              <p>check if we’re empty now</p>
+              <p>空かどうか判定</p>
 
             </div>
             
@@ -4898,7 +4865,7 @@ including events that the collection has from it</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-251">&#182;</a>
               </div>
-              <p>If empty, show the empty view</p>
+              <p>もし空の場合、空のビューを表示します。</p>
 
             </div>
             
@@ -4917,7 +4884,7 @@ including events that the collection has from it</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-252">&#182;</a>
               </div>
-              <p>You might need to override this if you’ve overridden appendHtml</p>
+              <p><code>appendHtml</code>をオーバーライドする際は、一緒にオーバーライドします。</p>
 
             </div>
             
@@ -4934,9 +4901,8 @@ including events that the collection has from it</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-253">&#182;</a>
               </div>
-              <p>Append the HTML to the collection’s <code>el</code>.
-Override this method to do something other
-than <code>.append</code>.</p>
+              <p>コレクションの<code>el</code>にDOMを組み込みます。
+単純に<code>.append</code>以外のことをする場合は、このメソッドをオーバーライドします。</p>
 
             </div>
             
@@ -4952,9 +4918,8 @@ than <code>.append</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-254">&#182;</a>
               </div>
-              <p>buffering happens on reset events and initial renders
-in order to reduce the number of inserts into the
-document, which are expensive.</p>
+              <p>DOMの更新はコストが高いので、初回のレンダリング時や、
+resetイベントの時にはバッファを使うようにします。</p>
 
             </div>
             
@@ -4972,8 +4937,8 @@ document, which are expensive.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-255">&#182;</a>
               </div>
-              <p>If we’ve already rendered the main collection, just
-append the new items directly into the element.</p>
+              <p>既にレンダリングされていたり、新しいアイテムを追加するときは、
+直接DOMに要素を追加します。</p>
 
             </div>
             
@@ -4990,8 +4955,7 @@ append the new items directly into the element.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-256">&#182;</a>
               </div>
-              <p>Internal method to set up the <code>children</code> object for
-storing all of the child views</p>
+              <p>全ての子ビューを貯めておく<code>children</code>オブジェクトを作成する内部メソッドです。</p>
 
             </div>
             
@@ -5008,8 +4972,7 @@ storing all of the child views</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-257">&#182;</a>
               </div>
-              <p>Handle cleanup and other closing needs for
-the collection of views.</p>
+              <p>コレクションのビューを適切にcloseするためのハンドラです。</p>
 
             </div>
             
@@ -5032,8 +4995,7 @@ the collection of views.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-258">&#182;</a>
               </div>
-              <p>Close the child views that this collection view
-is holding on to, if any</p>
+              <p>コレクションのもつ子ビューを削除します。</p>
 
             </div>
             

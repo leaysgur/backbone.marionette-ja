@@ -1574,23 +1574,21 @@ Marionette.View = Backbone.View.extend({
 // Item View
 // ---------
 
-// A single item view implementation that contains code for rendering
-// with underscore.js templates, serializing the view's model or collection,
-// and calling several methods on extended views, such as `onRender`.
+// 単一のアイテムを表示するビューの実装です。
+// underscore.jsのテンプレートを使ってレンダリングするメソッドや、
+// 紐付けられたビューのモデルかコレクションのデータをシリアライズするメソッドのほか、
+// `onRender`のように、ビューで拡張されたメソッドを実行することができます。
 Marionette.ItemView = Marionette.View.extend({
 
-  // Setting up the inheritance chain which allows changes to
-  // Marionette.View.prototype.constructor which allows overriding
+  // オーバーライド可能なMarionette.View.prototype.constructorを変更できるようにします。
   constructor: function(){
     Marionette.View.prototype.constructor.apply(this, arguments);
   },
 
-  // Serialize the model or collection for the view. If a model is
-  // found, `.toJSON()` is called. If a collection is found, `.toJSON()`
-  // is also called, but is used to populate an `items` array in the
-  // resulting data. If both are found, defaults to the model.
-  // You can override the `serializeData` method in your own view
-  // definition, to provide custom serialization for your view's data.
+  // 紐付けられたモデル、コレクションをビュー用にシリアライズします。
+  // モデルが見つかった場合は`.toJSON()`を実行した結果を返し、
+  // コレクションがみつかった場合は、`items`という名前の配列で`.toJSON()`の結果を返します。
+  // このメソッドをオーバーライドすることで、独自の`serializeData`を実装することもできます。
   serializeData: function(){
     var data = {};
 
@@ -1604,11 +1602,10 @@ Marionette.ItemView = Marionette.View.extend({
     return data;
   },
 
-  // Render the view, defaulting to underscore.js templates.
-  // You can override this in your view definition to provide
-  // a very specific rendering for your view. In general, though,
-  // you should override the `Marionette.Renderer` object to
-  // change how Marionette renders views.
+  // ビューをレンダリングします。
+  // デフォルトでは、underscore.jsのテンプレートを使います。
+  // このメソッドをオーバーライドすることもできますが、
+  // `Marionette.Renderer`オブジェクトをオーバーライドするほうが良いです。
   render: function(){
     this.isClosed = false;
 
@@ -1630,8 +1627,8 @@ Marionette.ItemView = Marionette.View.extend({
     return this;
   },
 
-  // Override the default close event to add a few
-  // more events that are triggered.
+  // close時のイベントをもう少し定義したい場合は、
+  // このメソッドをオーバーライドします。
   close: function(){
     if (this.isClosed){ return; }
 
@@ -1646,14 +1643,13 @@ Marionette.ItemView = Marionette.View.extend({
 // Collection View
 // ---------------
 
-// A view that iterates over a Backbone.Collection
-// and renders an individual ItemView for each model.
+// Backbone.Collectionをイテレートし、
+// それぞれのモデルでItemViewをレンダリングします。
 Marionette.CollectionView = Marionette.View.extend({
-  // used as the prefix for item view events
-  // that are forwarded through the collectionview
+  // ItemViewで使うイベント名のプレフィックス
   itemViewEventPrefix: "itemview",
 
-  // constructor
+  // コンストラクタ
   constructor: function(options){
     this._initChildViewStorage();
 
@@ -1663,9 +1659,8 @@ Marionette.CollectionView = Marionette.View.extend({
     this.initRenderBuffer();
   },
 
-  // Instead of inserting elements one by one into the page,
-  // it's much more performant to insert elements into a document
-  // fragment and then insert that document fragment into the page
+  // パフォーマンスのため、各要素を随時DOMに組み込むのではなく、
+  // documentFragmentを使います。
   initRenderBuffer: function() {
     this.elBuffer = document.createDocumentFragment();
     this._bufferedChildren = [];
@@ -1692,8 +1687,7 @@ Marionette.CollectionView = Marionette.View.extend({
     }
   },
 
-  // Configured the initial events that the collection view
-  // binds to.
+  // コレクションビューへのイベントをバインドします。
   _initialEvents: function(){
     if (this.collection){
       this.listenTo(this.collection, "add", this.addChildView);
@@ -1702,7 +1696,7 @@ Marionette.CollectionView = Marionette.View.extend({
     }
   },
 
-  // Handle a child item added to the collection
+  // コレクションに子となるビューを追加します。
   addChildView: function(item, collection, options){
     this.closeEmptyView();
     var ItemView = this.getItemView(item);
@@ -1710,31 +1704,27 @@ Marionette.CollectionView = Marionette.View.extend({
     this.addItemView(item, ItemView, index);
   },
 
-  // Override from `Marionette.View` to guarantee the `onShow` method
-  // of child views is called.
+  // 子ビューの`onShow`が呼ばれるように、`Marionette.View`からオーバーライドします。
   onShowCalled: function(){
     this.children.each(function(child){
       Marionette.triggerMethod.call(child, "show");
     });
   },
 
-  // Internal method to trigger the before render callbacks
-  // and events
+  // レンダリング直前のイベントとコールバックを実行する内部メソッドです。
   triggerBeforeRender: function(){
     this.triggerMethod("before:render", this);
     this.triggerMethod("collection:before:render", this);
   },
 
-  // Internal method to trigger the rendered callbacks and
-  // events
+  // レンダリング直後のイベントとコールバックを実行する内部メソッドです。
   triggerRendered: function(){
     this.triggerMethod("render", this);
     this.triggerMethod("collection:rendered", this);
   },
 
-  // Render the collection of items. Override this method to
-  // provide your own implementation of a render function for
-  // the collection view.
+  // コレクションをレンダリングします。
+  // オーバーライドすることで独自の方法でレンダリングすることもできます。
   render: function(){
     this.isClosed = false;
     this.triggerBeforeRender();
@@ -1743,9 +1733,9 @@ Marionette.CollectionView = Marionette.View.extend({
     return this;
   },
 
-  // Internal method. Separated so that CompositeView can have
-  // more control over events being triggered, around the rendering
-  // process
+  // 内部メソッドです。
+  // レンダリング実行の際に、CompositeViewがよりイベント駆動しやすいよう、
+  // 分けて実装しておきます。
   _renderChildren: function(){
     this.startBuffering();
 
@@ -1761,8 +1751,7 @@ Marionette.CollectionView = Marionette.View.extend({
     this.endBuffering();
   },
 
-  // Internal method to loop through each item in the
-  // collection view and show it
+  // コレクション内のそれぞれのアイテムをループし、表示する内部メソッドです。
   showCollection: function(){
     var ItemView;
     this.collection.each(function(item, index){
@@ -1771,9 +1760,7 @@ Marionette.CollectionView = Marionette.View.extend({
     }, this);
   },
 
-  // Internal method to show an empty view in place of
-  // a collection of item views, when the collection is
-  // empty
+  // コレクションが空の時に入れておく空のビューを作る内部メソッドです。
   showEmptyView: function(){
     var EmptyView = this.getEmptyView();
 
@@ -1784,9 +1771,8 @@ Marionette.CollectionView = Marionette.View.extend({
     }
   },
 
-  // Internal method to close an existing emptyView instance
-  // if one exists. Called when a collection view has been
-  // rendered empty, and then an item is added to the collection.
+  // 空のビューのインスタンスがあれば、それを削除する内部メソッドです。
+  // 空のコレクションビューに対して、何かアイテムが追加された時に実行されます。
   closeEmptyView: function(){
     if (this._showingEmptyView){
       this.closeChildren();
@@ -1794,14 +1780,14 @@ Marionette.CollectionView = Marionette.View.extend({
     }
   },
 
-  // Retrieve the empty view type
+  // 空のビューのビュータイプを取得します。
   getEmptyView: function(){
     return Marionette.getOption(this, "emptyView");
   },
 
-  // Retrieve the itemView type, either from `this.options.itemView`
-  // or from the `itemView` in the object definition. The "options"
-  // takes precedence.
+  // アイテムビューのタイプを取得します。
+  // `this.options.itemView`か、`itemView`の定義から取得します。
+  // "options"が優先して使われます。
   getItemView: function(item){
     var itemView = Marionette.getOption(this, "itemView");
 
@@ -1812,50 +1798,47 @@ Marionette.CollectionView = Marionette.View.extend({
     return itemView;
   },
 
-  // Render the child item's view and add it to the
-  // HTML for the collection view.
+  // アイテムビューを追加し、コレクションのビューとしてレンダリングします。
   addItemView: function(item, ItemView, index){
-    // get the itemViewOptions if any were specified
+    // 定義されていれば、オプションを取得
     var itemViewOptions = Marionette.getOption(this, "itemViewOptions");
     if (_.isFunction(itemViewOptions)){
       itemViewOptions = itemViewOptions.call(this, item, index);
     }
 
-    // build the view
+    // 子ビューを作成
     var view = this.buildItemView(item, ItemView, itemViewOptions);
 
-    // set up the child view event forwarding
+    // 子ビューのイベントを転送しておく
     this.addChildViewEventForwarding(view);
 
-    // this view is about to be added
+    // ビューの追加予告
     this.triggerMethod("before:item:added", view);
 
-    // Store the child view itself so we can properly
-    // remove and/or close it later
+    // 子ビューを格納することで、適切に削除できるようにします。
     this.children.add(view);
 
-    // Render it and show it
+    // レンダリングし、表示
     this.renderItemView(view, index);
 
-    // call the "show" method if the collection view
-    // has already been shown
+    // 既に表示されていれば、"show"mメソッドを実行
     if (this._isShown && !this.isBuffering){
       Marionette.triggerMethod.call(view, "show");
     }
 
-    // this view was added
+    // ビューが追加された
     this.triggerMethod("after:item:added", view);
 
     return view;
   },
 
-  // Set up the child view event forwarding. Uses an "itemview:"
-  // prefix in front of all forwarded events.
+  // 子ビューのイベントを引き継ぎます。
+  // それらのイベント名には、"itemview:"という接頭辞がつきます。
   addChildViewEventForwarding: function(view){
     var prefix = Marionette.getOption(this, "itemViewEventPrefix");
 
-    // Forward all child item view events through the parent,
-    // prepending "itemview:" to the event name
+    // アイテムビューに紐づくイベントを親に転送します。
+    // イベント名の先頭に、"itemview:"を付加します。
     this.listenTo(view, "all", function(){
       var args = slice.call(arguments);
       var rootEvent = args[0];
@@ -1864,7 +1847,7 @@ Marionette.CollectionView = Marionette.View.extend({
       args[0] = prefix + ":" + rootEvent;
       args.splice(1, 0, view);
 
-      // call collectionView itemEvent if defined
+      // itemEventが定義されていれば実行します。
       if (typeof itemEvents !== "undefined" && _.isFunction(itemEvents[rootEvent])) {
         itemEvents[rootEvent].apply(this, args);
       }
@@ -1873,7 +1856,7 @@ Marionette.CollectionView = Marionette.View.extend({
     }, this);
   },
 
-  // returns the value of itemEvents depending on if a function
+  // itemEventsを取得します。
   getItemEvents: function() {
     if (_.isFunction(this.itemEvents)) {
       return this.itemEvents.call(this);
@@ -1882,32 +1865,32 @@ Marionette.CollectionView = Marionette.View.extend({
     return this.itemEvents;
   },
 
-  // render the item view
+  // アイテムビューをレンダリングします。
   renderItemView: function(view, index) {
     view.render();
     this.appendHtml(this, view, index);
   },
 
-  // Build an `itemView` for every model in the collection.
+  // コレクションの内の各モデルに対し、`itemView`を作成します。
   buildItemView: function(item, ItemViewType, itemViewOptions){
     var options = _.extend({model: item}, itemViewOptions);
     return new ItemViewType(options);
   },
 
-  // get the child view by item it holds, and remove it
+  // アイテムからビューを取得し、削除します。
   removeItemView: function(item){
     var view = this.children.findByModel(item);
     this.removeChildView(view);
     this.checkEmpty();
   },
 
-  // Remove the child view and close it
+  // 子ビューを削除します。
   removeChildView: function(view){
 
-    // shut down the child view properly,
-    // including events that the collection has from it
+    // 適切に子ビューを削除します。
+    // 貼られていたハンドラも同じく削除します。
     if (view){
-      // call 'close' or 'remove', depending on which is found
+      // `close`か`remove`か、見つかったほうを実行
       if (view.close) { view.close(); }
       else if (view.remove) { view.remove(); }
 
@@ -1918,50 +1901,46 @@ Marionette.CollectionView = Marionette.View.extend({
     this.triggerMethod("item:removed", view);
   },
 
-  // helper to check if the collection is empty
+  // コレクションが空かどうかをチェックするヘルパーです。
   isEmpty: function(collection){
-    // check if we're empty now
+    // 空かどうか判定
     return !this.collection || this.collection.length === 0;
   },
 
-  // If empty, show the empty view
+  // もし空の場合、空のビューを表示します。
   checkEmpty: function (){
     if (this.isEmpty(this.collection)){
       this.showEmptyView();
     }
   },
 
-  // You might need to override this if you've overridden appendHtml
+  // `appendHtml`をオーバーライドする際は、一緒にオーバーライドします。
   appendBuffer: function(collectionView, buffer) {
     collectionView.$el.append(buffer);
   },
 
-  // Append the HTML to the collection's `el`.
-  // Override this method to do something other
-  // than `.append`.
+  // コレクションの`el`にDOMを組み込みます。
+  // 単純に`.append`以外のことをする場合は、このメソッドをオーバーライドします。
   appendHtml: function(collectionView, itemView, index){
     if (collectionView.isBuffering) {
-      // buffering happens on reset events and initial renders
-      // in order to reduce the number of inserts into the
-      // document, which are expensive.
+      // DOMの更新はコストが高いので、初回のレンダリング時や、
+      // resetイベントの時にはバッファを使うようにします。
       collectionView.elBuffer.appendChild(itemView.el);
       collectionView._bufferedChildren.push(itemView);
     }
     else {
-      // If we've already rendered the main collection, just
-      // append the new items directly into the element.
+      // 既にレンダリングされていたり、新しいアイテムを追加するときは、
+      // 直接DOMに要素を追加します。
       collectionView.$el.append(itemView.el);
     }
   },
 
-  // Internal method to set up the `children` object for
-  // storing all of the child views
+  // 全ての子ビューを貯めておく`children`オブジェクトを作成する内部メソッドです。
   _initChildViewStorage: function(){
     this.children = new Backbone.ChildViewContainer();
   },
 
-  // Handle cleanup and other closing needs for
-  // the collection of views.
+  // コレクションのビューを適切にcloseするためのハンドラです。
   close: function(){
     if (this.isClosed){ return; }
 
@@ -1972,8 +1951,7 @@ Marionette.CollectionView = Marionette.View.extend({
     Marionette.View.prototype.close.apply(this, arguments);
   },
 
-  // Close the child views that this collection view
-  // is holding on to, if any
+  // コレクションのもつ子ビューを削除します。
   closeChildren: function(){
     this.children.each(function(child){
       this.removeChildView(child);
