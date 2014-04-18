@@ -2014,9 +2014,6 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     return data;
   },
 
-  // Renders the model once, and the collection once. Calling
-  // this again will tell the model's view to re-render itself
-  // but the collection will not re-render.
   // モデルとコレクションを1度だけ使いレンダリングします。
   // 再度実行された場合は、モデルのビューのみ再レンダリングしますが、
   // コレクションに対しては行いません。
@@ -2122,17 +2119,17 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
 // Layout
 // ------
 
-// Used for managing application layouts, nested layouts and
-// multiple regions within an application or sub-application.
+// レイアウトは、
+// アプリケーションやサブアプリケーションを含む複数のリージョンや、
+// ネストしたレイアウト等を管理するものです。
 //
-// A specialized view type that renders an area of HTML and then
-// attaches `Region` instances to the specified `regions`.
-// Used for composite view management and sub-application areas.
+// 特別なビュータイプを持ち、HTMLを用意して自身のリージョンとし、
+// そこにリージョンのインスタンスを紐付けていきます。
+// コンポジットビューやサブアプリケーションのために使われます。
 Marionette.Layout = Marionette.ItemView.extend({
   regionType: Marionette.Region,
 
-  // Ensure the regions are available when the `initialize` method
-  // is called.
+  // `initialize`時にリージョンが利用できることを保証します。
   constructor: function (options) {
     options = options || {};
 
@@ -2142,64 +2139,61 @@ Marionette.Layout = Marionette.ItemView.extend({
     Marionette.ItemView.prototype.constructor.call(this, options);
   },
 
-  // Layout's render will use the existing region objects the
-  // first time it is called. Subsequent calls will close the
-  // views that the regions are showing and then reset the `el`
-  // for the regions to the newly rendered DOM elements.
+  // 初回のレイアウトのレンダリング時は、既存のリージョンを使います。
+  // その後のレンダリング時には、ビューを一度closeし、
+  // 新しくレンダリングするDOMのために`el`をリセットします。
   render: function(){
 
     if (this.isClosed){
-      // a previously closed layout means we need to
-      // completely re-initialize the regions
+      // 一度レイアウトが閉じられたということは、
+      // 再度リージョンを初期化する必要があることを意味します。
       this._initializeRegions();
     }
     if (this._firstRender) {
-      // if this is the first render, don't do anything to
-      // reset the regions
+      // 初回のレンダリングではリージョンをリセットしない
       this._firstRender = false;
     } else if (!this.isClosed){
-      // If this is not the first render call, then we need to
-      // re-initializing the `el` for each region
+      // 初回のレンダリングでない場合、各リージョンの`el`を再度初期化
       this._reInitializeRegions();
     }
 
     return Marionette.ItemView.prototype.render.apply(this, arguments);
   },
 
-  // Handle closing regions, and then close the view itself.
+  // リージョンを閉じるハンドラで、ビュー自身を削除します。
   close: function () {
     if (this.isClosed){ return; }
     this.regionManager.close();
     Marionette.ItemView.prototype.close.apply(this, arguments);
   },
 
-  // Add a single region, by name, to the layout
+  // 名前を指定し、単一のリージョンをレイアウトに追加します。
   addRegion: function(name, definition){
     var regions = {};
     regions[name] = definition;
     return this._buildRegions(regions)[name];
   },
 
-  // Add multiple regions as a {name: definition, name2: def2} object literal
+  // 複数のリージョンを、以下のようなオブジェクトリテラルで追加します。
+  // `{name: definition, name2: def2}`
   addRegions: function(regions){
     this.regions = _.extend({}, this.regions, regions);
     return this._buildRegions(regions);
   },
 
-  // Remove a single region from the Layout, by name
+  // 名前を指定し、単一のリージョンをレイアウトから削除します。
   removeRegion: function(name){
     delete this.regions[name];
     return this.regionManager.removeRegion(name);
   },
 
-  // Provides alternative access to regions
-  // Accepts the region name
-  // getRegion('main')
+  // リージョンへアクセスする方法の一つです。
+  // `getRegion('main')`のように使います。
   getRegion: function(region) {
     return this.regionManager.get(region);
   },
 
-  // internal method to build regions
+  // リージョンを作成する内部メソッドです。
   _buildRegions: function(regions){
     var that = this;
 
@@ -2211,8 +2205,8 @@ Marionette.Layout = Marionette.ItemView.extend({
     return this.regionManager.addRegions(regions, defaults);
   },
 
-  // Internal method to initialize the regions that have been defined in a
-  // `regions` attribute on this layout.
+  // このレイアウトの`regions`プロパティの内容に従い、
+  // リージョンを初期化していく内部メソッドです。
   _initializeRegions: function (options) {
     var regions;
     this._initRegionManager();
@@ -2226,8 +2220,7 @@ Marionette.Layout = Marionette.ItemView.extend({
     this.addRegions(regions);
   },
 
-  // Internal method to re-initialize all of the regions by updating the `el` that
-  // they point to
+  // それぞれのリージョンが持つ`el`を全て初期化しなおす内部メソッドです。
   _reInitializeRegions: function(){
     this.regionManager.closeRegions();
     this.regionManager.each(function(region){
@@ -2235,8 +2228,7 @@ Marionette.Layout = Marionette.ItemView.extend({
     });
   },
 
-  // Internal method to initialize the region manager
-  // and all regions in it
+  // リージョンマネージャーと、属する全てのリージョンを初期化する内部メソッドです。
   _initRegionManager: function(){
     this.regionManager = new Marionette.RegionManager();
 
@@ -2254,13 +2246,11 @@ Marionette.Layout = Marionette.ItemView.extend({
 
 
 // Behavior
-// -----------
-
-// A Behavior is an isolated set of DOM /
-// user interactions that can be mixed into any View.
-// Behaviors allow you to blackbox View specific interactions
-// into portable logical chunks, keeping your views simple and your code DRY.
-
+// --------
+//
+// ビヘイビアはどんなビューにもミックスインできる独立したDOMのインターフェースです。
+// これを使うことでブラックボックス化しやすい処理を切り出すことができ、
+// ビューのコードをシンプルに保つことができます。
 Marionette.Behavior = (function(_, Backbone){
   function Behavior(options, view){
     // Setup reference to the view.
