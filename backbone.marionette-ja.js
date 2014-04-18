@@ -1257,15 +1257,14 @@ Marionette.TemplateCache = function(templateId){
   this.templateId = templateId;
 };
 
-// TemplateCache object-level methods. Manage the template
-// caches from these method calls instead of creating
-// your own TemplateCache instances
+// TemplateCacheオブジェクトが保持するメソッド。
+// インスタンスを作る代わりに、
+// このオブジェクトでテンプレートのキャッシュを管理します。
 _.extend(Marionette.TemplateCache, {
   templateCaches: {},
 
-  // Get the specified template by id. Either
-  // retrieves the cached version, or loads it
-  // from the DOM.
+  // idによって特定のテンプレートを取得します。
+  // キャッシュがあるかをまず確認し、なければDOMから取得します。
   get: function(templateId){
     var cachedTemplate = this.templateCaches[templateId];
 
@@ -1277,13 +1276,10 @@ _.extend(Marionette.TemplateCache, {
     return cachedTemplate.load();
   },
 
-  // Clear templates from the cache. If no arguments
-  // are specified, clears all templates:
-  // `clear()`
-  //
-  // If arguments are specified, clears each of the
-  // specified templates from the cache:
-  // `clear("#t1", "#t2", "...")`
+  // テンプレートのキャッシュをクリアします。
+  // 引数なしに実行されると全てのテンプレートを、
+  // idを与えるとそれらのキャッシュをクリアします。
+  // `clear()`もしくは、`clear("#t1", "#t2", "...")`のように使います。
   clear: function(){
     var i;
     var args = slice.call(arguments);
@@ -1299,29 +1295,27 @@ _.extend(Marionette.TemplateCache, {
   }
 });
 
-// TemplateCache instance methods, allowing each
-// template cache object to manage its own state
-// and know whether or not it has been loaded
+// TemplateCacheのインスタンスメソッドです。
+// これらにより、自身の状態やロード済みかどうかを知ることができます。
 _.extend(Marionette.TemplateCache.prototype, {
 
-  // Internal method to load the template
+  // テンプレートをロードする内部メソッド
   load: function(){
-    // Guard clause to prevent loading this template more than once
+    // 多重に読み込まれるのを防止
     if (this.compiledTemplate){
       return this.compiledTemplate;
     }
 
-    // Load the template and compile it
+    // テンプレートをロードしてコンパイル
     var template = this.loadTemplate(this.templateId);
     this.compiledTemplate = this.compileTemplate(template);
 
     return this.compiledTemplate;
   },
 
-  // Load a template from the DOM, by default. Override
-  // this method to provide your own template retrieval
-  // For asynchronous loading with AMD/RequireJS, consider
-  // using a template-loader plugin as described here:
+  // デフォルトではDOMからテンプレートをロードします。
+  // テンプレート取得の挙動を変える場合は、このメソッドをオーバーライドします。
+  // AMD/RequireJSの非同期読み込みや、以下のようなプラグインを使う場合です。
   // https://github.com/marionettejs/backbone.marionette/wiki/Using-marionette-with-requirejs
   loadTemplate: function(templateId){
     var template = Marionette.$(templateId).html();
@@ -1333,10 +1327,9 @@ _.extend(Marionette.TemplateCache.prototype, {
     return template;
   },
 
-  // Pre-compile the template before caching it. Override
-  // this method if you do not need to pre-compile a template
-  // (JST / RequireJS for example) or if you want to change
-  // the template engine used (Handebars, etc).
+  // キャッシュする前に、テンプレートをコンパイルします。
+  // Handlebars等のテンプレートエンジンを使いたい場合や、
+  // プリコンパイルの必要がない場合には、このメソッドをオーバーライドします。
   compileTemplate: function(rawTemplate){
     return _.template(rawTemplate);
   }
@@ -1345,14 +1338,12 @@ _.extend(Marionette.TemplateCache.prototype, {
 // Renderer
 // --------
 
-// Render a template with data by passing in the template
-// selector and the data to render.
+// 与えられたデータとテンプレートを使ってレンダリングします。
 Marionette.Renderer = {
 
-  // Render a template with data. The `template` parameter is
-  // passed to the `TemplateCache` object to retrieve the
-  // template function. Override this method to provide your own
-  // custom rendering and template handling for all of Marionette.
+  // データを使ってテンプレートをレンダリングします。
+  // `template`の引数は、`TemplateCache`オブジェクトへ渡ります。
+  // レンダリングとテンプレートの管理を独自にやる場合は、このメソッドをオーバーライドします。
   render: function(template, data){
 
     if (!template) {
@@ -1374,7 +1365,7 @@ Marionette.Renderer = {
 // Marionette.View
 // ---------------
 
-// The core view type that other Marionette views extend from.
+// Marionetteビューの元となるビュータイプを定義します。
 Marionette.View = Backbone.View.extend({
 
   constructor: function(options){
@@ -1384,13 +1375,13 @@ Marionette.View = Backbone.View.extend({
       new Marionette.Behaviors(this);
     }
 
-    // this exposes view options to the view initializer
-    // this is a backfill since backbone removed the assignment
-    // of this.options
-    // at some point however this may be removed
+    // ビューの初期化時に渡されるオプションです。
+    // コレはBackboneで`this.options`が使われなくなったため、
+    // 後方互換のために実装されています。
+    // よって、いくつかの場面では使われないかもしれません。
     this.options = _.extend({}, _.result(this, 'options'), _.isFunction(options) ? options.call(this) : options);
 
-    // parses out the @ui DSL for events
+    // @ui記法をパース
     this.events = this.normalizeUIKeys(_.result(this, 'events'));
     Backbone.View.prototype.constructor.apply(this, arguments);
 
@@ -1398,27 +1389,25 @@ Marionette.View = Backbone.View.extend({
     this.listenTo(this, "show", this.onShowCalled);
   },
 
-  // import the "triggerMethod" to trigger events with corresponding
-  // methods if the method exists
+  // メソッドが存在し、一致するイベントがあった場合に実行するため、
+  // "triggerMthod"をインポートします。
   triggerMethod: Marionette.triggerMethod,
 
-  // Imports the "normalizeMethods" to transform hashes of
-  // events=>function references/names to a hash of events=>function references
+  // イベント名: メソッド、またはメソッド名のマップを、
+  // イベント名: メソッドの形に揃えて返す"normalizeMethods"をインポートします。
   normalizeMethods: Marionette.normalizeMethods,
 
-  // Get the template for this view
-  // instance. You can set a `template` attribute in the view
-  // definition or pass a `template: "whatever"` parameter in
-  // to the constructor options.
+  // このビューのインスタンス用のテンプレートを取得します。
+  // ビューの定義時に`template`プロパティで設定することもできますし、
+  // コンストラクタへオプションとして`template: "whatever"`形式で渡すこともできます。
   getTemplate: function(){
     return Marionette.getOption(this, "template");
   },
 
-  // Mix in template helper methods. Looks for a
-  // `templateHelpers` attribute, which can either be an
-  // object literal, or a function that returns an object
-  // literal. All methods and attributes from this object
-  // are copies to the object passed in.
+  // テンプレートのヘルパーメソッドをミックスインします。
+  // オブジェクトリテラルか、オブジェクトを返すメソッドで、
+  // `templateHelpers`プロパティに設定します。
+  // 設定されたものは全てコピーして渡されます。
   mixinTemplateHelpers: function(target){
     target = target || {};
     var templateHelpers = Marionette.getOption(this, "templateHelpers");
@@ -1428,33 +1417,30 @@ Marionette.View = Backbone.View.extend({
     return _.extend(target, templateHelpers);
   },
 
-
   normalizeUIKeys: function(hash) {
     var ui = _.result(this, 'ui');
     return Marionette.normalizeUIKeys(hash, ui);
   },
 
-  // Configure `triggers` to forward DOM events to view
-  // events. `triggers: {"click .foo": "do:foo"}`
+  // トリガーの定義をDOMイベントからビューのイベントへコンバートします。
   configureTriggers: function(){
     if (!this.triggers) { return; }
 
     var triggerEvents = {};
 
-    // Allow `triggers` to be configured as a function
+    // `triggers`はメソッドでもOK
     var triggers = this.normalizeUIKeys(_.result(this, "triggers"));
 
-    // Configure the triggers, prevent default
-    // action and stop propagation of DOM events
+    // preventDefaultやstopPropagationをトリガーにも設定します。
     _.each(triggers, function(value, key){
 
       var hasOptions = _.isObject(value);
       var eventName = hasOptions ? value.event : value;
 
-      // build the event handler function for the DOM event
+      // DOMイベント用にハンドラを作成
       triggerEvents[key] = function(e){
 
-        // stop the event in its tracks
+        // イベントを抑止
         if (e) {
           var prevent = e.preventDefault;
           var stop = e.stopPropagation;
@@ -1466,14 +1452,14 @@ Marionette.View = Backbone.View.extend({
           if (shouldStop && stop) { stop.apply(e); }
         }
 
-        // build the args for the event
+        // イベント用に引数を作成
         var args = {
           view: this,
           model: this.model,
           collection: this.collection
         };
 
-        // trigger the event
+        // イベント発火
         this.triggerMethod(eventName, args);
       };
 
@@ -1482,33 +1468,33 @@ Marionette.View = Backbone.View.extend({
     return triggerEvents;
   },
 
-  // Overriding Backbone.View's delegateEvents to handle
-  // the `triggers`, `modelEvents`, and `collectionEvents` configuration
+  // `triggers`、`modelEvents`、`collectionEvents`にハンドラをバインドする、
+  // Backbone.ViewのdelegateEventsをオーバーライドします。
   delegateEvents: function(events){
     this._delegateDOMEvents(events);
     Marionette.bindEntityEvents(this, this.model, Marionette.getOption(this, "modelEvents"));
     Marionette.bindEntityEvents(this, this.collection, Marionette.getOption(this, "collectionEvents"));
   },
 
-  // internal method to delegate DOM events and triggers
+  // DOMイベントやトリガーを扱う内部メソッドです。
   _delegateDOMEvents: function(events){
     events = events || this.events;
     if (_.isFunction(events)){ events = events.call(this); }
 
     var combinedEvents = {};
 
-    // look up if this view has behavior events
+    // このビューがビヘイビアのイベントを持っているか確認
     var behaviorEvents = _.result(this, 'behaviorEvents') || {};
     var triggers = this.configureTriggers();
 
-    // behavior events will be overriden by view events and or triggers
+    // ビヘイビアのイベントは、ビューのイベントとトリガーによってオーバーライドされます。
     _.extend(combinedEvents, behaviorEvents, events, triggers);
 
     Backbone.View.prototype.delegateEvents.call(this, combinedEvents);
   },
 
-  // Overriding Backbone.View's undelegateEvents to handle unbinding
-  // the `triggers`, `modelEvents`, and `collectionEvents` config
+  // `triggers`、`modelEvents`、`collectionEvents`へのハンドラをアンバインドする、
+  // Backbone.ViewのundelegateEventsをオーバーライドします。
   undelegateEvents: function(){
     var args = Array.prototype.slice.call(arguments);
     Backbone.View.prototype.undelegateEvents.apply(this, args);
@@ -1517,72 +1503,69 @@ Marionette.View = Backbone.View.extend({
     Marionette.unbindEntityEvents(this, this.collection, Marionette.getOption(this, "collectionEvents"));
   },
 
-  // Internal method, handles the `show` event.
+  // `show`イベントを扱う内部メソッド。
   onShowCalled: function(){},
 
-  // Default `close` implementation, for removing a view from the
-  // DOM and unbinding it. Regions will call this method
-  // for you. You can specify an `onClose` method in your view to
-  // add custom code that is called after the view is closed.
+  // ビューをDOMから削除し、イベントをアンバインドする`close`メソッドの実装です。
+  // リージョンはこのメソッドを実行します。
+  // `onClose`メソッドを定義することができ、それはビューが削除された直後に実行されます。
   close: function(){
     if (this.isClosed) { return; }
 
     var args = Array.prototype.slice.call(arguments);
 
-    // allow the close to be stopped by returning `false`
-    // from the `onBeforeClose` method
+    // `onBeforeClose`メソッドが`false`を返すことで、closeをキャンセルできます。
     var shouldClose = this.triggerMethod.apply(this, ["before:close"].concat(args));
     if (shouldClose === false){
       return;
     }
 
-    // mark as closed before doing the actual close, to
-    // prevent infinite loops within "close" event handlers
-    // that are trying to close other views
+    // 実際のcloseが行われるより先に、フラグをタテておきます。
+    // そうすることで、他のビューに関連した"close"イベントが無限ループすることを防ぎます。
     this.isClosed = true;
     this.triggerMethod.apply(this, ["close"].concat(args));
 
-    // unbind UI elements
+    // UIに紐付けられたハンドラをアンバインド
     this.unbindUIElements();
 
-    // remove the view from the DOM
+    // DOMからビューを削除
     this.remove();
   },
 
-  // This method binds the elements specified in the "ui" hash inside the view's code with
-  // the associated jQuery selectors.
+  // ビューの"ui"プロパティ(中身はjQueryのセレクタ)を使い、実際にDOMをバインドします。
   bindUIElements: function(){
     if (!this.ui) { return; }
 
-    // store the ui hash in _uiBindings so they can be reset later
-    // and so re-rendering the view will be able to find the bindings
+    // UIの定義を_uiBindingsへ退避。
+    // そうすることで後にリセットすることができ、
+    // レンダリングされたビューからバインドする要素を見つけることができます。
     if (!this._uiBindings){
       this._uiBindings = this.ui;
     }
 
-    // get the bindings result, as a function or otherwise
+    // メソッドなら結果、そうでないなら値をバインディング
     var bindings = _.result(this, "_uiBindings");
 
-    // empty the ui so we don't have anything to start with
+    // 最初は何もないように
     this.ui = {};
 
-    // bind each of the selectors
+    // それぞれのセレクタをバインド
     _.each(_.keys(bindings), function(key) {
       var selector = bindings[key];
       this.ui[key] = this.$(selector);
     }, this);
   },
 
-  // This method unbinds the elements specified in the "ui" hash
+  // "ui"プロパティに定義された要素をアンバインドします。
   unbindUIElements: function(){
     if (!this.ui || !this._uiBindings){ return; }
 
-    // delete all of the existing ui bindings
+    // 全てのバインディングを削除
     _.each(this.ui, function($el, name){
       delete this.ui[name];
     }, this);
 
-    // reset the ui element to the original bindings configuration
+    // UIの定義を元通りにリセット
     this.ui = this._uiBindings;
     delete this._uiBindings;
   }
