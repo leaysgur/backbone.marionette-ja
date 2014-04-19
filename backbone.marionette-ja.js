@@ -2644,28 +2644,25 @@ Marionette.Application.extend = Marionette.extend;
 // Module
 // ------
 //
-// A simple module system, used to create privacy and encapsulation in
-// Marionette applications
+// アプリケーションをカプセル化するための、シンプルなモジュールの実装です。
 Marionette.Module = function(moduleName, app, options){
   this.moduleName = moduleName;
   this.options = _.extend({}, this.options, options);
-  // Allow for a user to overide the initialize
-  // for a given module instance.
+  // インスタンスごとにオーバーライドできるようにします。
   this.initialize = options.initialize || this.initialize;
 
-  // Set up an internal store for sub-modules.
+  // サブモジュールを内部に保持します。
   this.submodules = {};
 
   this._setupInitializersAndFinalizers();
 
-  // Set an internal reference to the app
-  // within a module.
+  // モジュール内にアプリケーションへの参照を保持します。
   this.app = app;
 
-  // By default modules start with their parents.
+  // デフォルトでは、親と同時に起動します。
   this.startWithParent = true;
 
-  // Setup a proxy to the trigger method implementation.
+  // `triggerMethod`を使います。
   this.triggerMethod = Marionette.triggerMethod;
 
   if (_.isFunction(this.initialize)){
@@ -2675,41 +2672,38 @@ Marionette.Module = function(moduleName, app, options){
 
 Marionette.Module.extend = Marionette.extend;
 
-// Extend the Module prototype with events / listenTo, so that the module
-// can be used as an event aggregator or pub/sub.
+// モジュールのprototypeをBackbone.Eventsで拡張します。
+// こうすることでPub/Subオブジェクトとしても使うことができます。
 _.extend(Marionette.Module.prototype, Backbone.Events, {
 
-  // Initialize is an empty function by default. Override it with your own
-  // initialization logic when extending Marionette.Module.
+  // `initialize`はデフォルトでは空のメソッドです。
+  // モジュールを作る際に実装してください。
   initialize: function(){},
 
-  // Initializer for a specific module. Initializers are run when the
-  // module's `start` method is called.
+  // モジュールの`start`メソッドが呼ばれた時に実行されるコールバックを追加します。
   addInitializer: function(callback){
     this._initializerCallbacks.add(callback);
   },
 
-  // Finalizers are run when a module is stopped. They are used to teardown
-  // and finalize any variables, references, events and other code that the
-  // module had set up.
+  // こちらはモジュールの`stop`メソッドが呼ばれた時に実行されるコールバックを追加します。
   addFinalizer: function(callback){
     this._finalizerCallbacks.add(callback);
   },
 
-  // Start the module, and run all of its initializers
+  // モジュールを起動し、`addInitializer`で追加したコールバックを実行します。
   start: function(options){
-    // Prevent re-starting a module that is already started
+    // 起動するのは1度きり
     if (this._isInitialized){ return; }
 
-    // start the sub-modules (depth-first hierarchy)
+    // サブモジュールも起動
     _.each(this.submodules, function(mod){
-      // check to see if we should start the sub-module with this parent
+      // サブモジュールを親モジュールと同士に起動するかチェック
       if (mod.startWithParent){
         mod.start(options);
       }
     });
 
-    // run the callbacks to "start" the current module
+    // "start"イベントに紐づくコールバックを実行
     this.triggerMethod("before:start", options);
 
     this._initializerCallbacks.run(options, this);
@@ -2718,42 +2712,41 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     this.triggerMethod("start", options);
   },
 
-  // Stop this module by running its finalizers and then stop all of
-  // the sub-modules for this module
+  // モジュールを停止し、`addFinalizer`で追加したコールバックを実行します。
+  // このモジュールのサブモジュールも全て停止されます。
   stop: function(){
-    // if we are not initialized, don't bother finalizing
+    // 初期化されてないものは無視
     if (!this._isInitialized){ return; }
     this._isInitialized = false;
 
     Marionette.triggerMethod.call(this, "before:stop");
 
-    // stop the sub-modules; depth-first, to make sure the
-    // sub-modules are stopped / finalized before parents
+    // 階層の深いサブモジュールから停止していきます。
+    // 親モジュールを停止する前に、必ず停止させます。
     _.each(this.submodules, function(mod){ mod.stop(); });
 
-    // run the finalizers
+    // 停止処理を実行
     this._finalizerCallbacks.run(undefined,this);
 
-    // reset the initializers and finalizers
+    // 初期化/停止時のコールバックをリセット
     this._initializerCallbacks.reset();
     this._finalizerCallbacks.reset();
 
     Marionette.triggerMethod.call(this, "stop");
   },
 
-  // Configure the module with a definition function and any custom args
-  // that are to be passed in to the definition function
+  // モジュールを定義します。
+  // 引数はすべてモジュールの定義へ渡されます。
   addDefinition: function(moduleDefinition, customArgs){
     this._runModuleDefinition(moduleDefinition, customArgs);
   },
 
-  // Internal method: run the module definition function with the correct
-  // arguments
+  // 正しい引数でモジュールを定義するための内部メソッドです。
   _runModuleDefinition: function(definition, customArgs){
-    // If there is no definition short circut the method.
+    // 定義がないなら返る
     if (!definition){ return; }
 
-    // build the correct list of arguments for the module definition
+    // モジュール定義への引数を整理
     var args = _.flatten([
       this,
       this.app,
@@ -2766,45 +2759,41 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
     definition.apply(this, args);
   },
 
-  // Internal method: set up new copies of initializers and finalizers.
-  // Calling this method will wipe out all existing initializers and
-  // finalizers.
+  // 初期化/停止のコールバックをリセットします。
+  // これが世なれると、既に追加されていたコールバックは削除されます。
   _setupInitializersAndFinalizers: function(){
     this._initializerCallbacks = new Marionette.Callbacks();
     this._finalizerCallbacks = new Marionette.Callbacks();
   }
 });
 
-// Type methods to create modules
 _.extend(Marionette.Module, {
 
-  // Create a module, hanging off the app parameter as the parent object.
+  // アプリケーションへの引数を親オブジェクトとしてモジュールを作成します。
   create: function(app, moduleNames, moduleDefinition){
     var module = app;
 
-    // get the custom args passed in after the module definition and
-    // get rid of the module name and definition function
+    // 引数からモジュール名と定義自体を除きます。
     var customArgs = slice.call(arguments);
     customArgs.splice(0, 3);
 
-    // Split the module names and get the number of submodules.
-    // i.e. an example module name of `Doge.Wow.Amaze` would
-    // then have the potential for 3 module definitions.
+    // モジュール名を分割し、サブモジュールの数を取得します。
+    // `Doge.Wow.Amaze`の場合、3つのモジュールが存在します。
     moduleNames = moduleNames.split(".");
     var length = moduleNames.length;
 
-    // store the module definition for the last module in the chain
+    // 最後のモジュールのために、定義を保持しておきます。
     var moduleDefinitions = [];
     moduleDefinitions[length-1] = moduleDefinition;
 
-    // Loop through all the parts of the module definition
+    // モジュール定義をループしていきます。
     _.each(moduleNames, function(moduleName, i){
       var parentModule = module;
       module = this._getModule(parentModule, moduleName, app, moduleDefinition);
       this._addModuleDefinition(parentModule, module, moduleDefinitions[i], customArgs);
     }, this);
 
-    // Return the last module in the definition chain
+    // 定義のチェーンの最後のモジュールを返します。
     return module;
   },
 
@@ -2812,14 +2801,14 @@ _.extend(Marionette.Module, {
     var options = _.extend({}, def);
     var ModuleClass = this.getClass(def);
 
-    // Get an existing module of this name if we have one
+    // 定義されていればそのモジュールを取得します。
     var module = parentModule[moduleName];
 
     if (!module){
-      // Create a new module if we don't have one
+      // 定義がない場合は、新たに作成
       module = new ModuleClass(moduleName, app, options);
       parentModule[moduleName] = module;
-      // store the module on the parent
+      // 親に保存
       parentModule.submodules[moduleName] = module;
     }
 
@@ -2828,10 +2817,9 @@ _.extend(Marionette.Module, {
 
   // ## Module Classes
   //
-  // Module classes can be used as an alternative to the define pattern.
-  // The extend function of a Module is identical to the extend functions
-  // on other Backbone and Marionette classes.
-  // This allows module lifecyle events like `onStart` and `onStop` to be called directly.
+  // モジュールクラスを使うことでもモジュールは定義できます。
+  // モジュールの`extend`は他のBackboneやMarionetteのクラスと同じです。
+  // これにより、`onStart`や`onStop`といったライフサイクルイベントを使うことができます。
   getClass: function(moduleDefinition) {
     var ModuleClass = Marionette.Module;
 
@@ -2839,8 +2827,7 @@ _.extend(Marionette.Module, {
       return ModuleClass;
     }
 
-    // If all of the module's functionality is defined inside its class,
-    // then the class can be passed in directly. `MyApp.module("Foo", FooModule)`.
+    // 全てのモジュール定義がクラス内にある場合は、そのまま使います。
     if (moduleDefinition.prototype instanceof ModuleClass) {
       return moduleDefinition;
     }
@@ -2848,9 +2835,9 @@ _.extend(Marionette.Module, {
     return moduleDefinition.moduleClass || ModuleClass;
   },
 
-  // Add the module definition and add a startWithParent initializer function.
-  // This is complicated because module definitions are heavily overloaded
-  // and support an anonymous function, module class, or options object
+  // モジュール定義を追加し、`startWithParent`のコールバックを追加します。
+  // モジュール定義は無名関数やモジュールやオプションなど、
+  // 重度にオーバーロードされることもあるので、複雑な実装になっています。
   _addModuleDefinition: function(parentModule, module, def, args){
     var fn = this._getDefine(def);
     var startWithParent = this._getStartWithParent(def, module);

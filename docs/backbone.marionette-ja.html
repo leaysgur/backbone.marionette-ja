@@ -6637,8 +6637,7 @@ addRegions({something: Region.extend({el: “#someRegion”}) });</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-338">&#182;</a>
               </div>
-              <p>A simple module system, used to create privacy and encapsulation in
-Marionette applications</p>
+              <p>アプリケーションをカプセル化するための、シンプルなモジュールの実装です。</p>
 
             </div>
             
@@ -6655,8 +6654,7 @@ Marionette applications</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-339">&#182;</a>
               </div>
-              <p>Allow for a user to overide the initialize
-for a given module instance.</p>
+              <p>インスタンスごとにオーバーライドできるようにします。</p>
 
             </div>
             
@@ -6671,7 +6669,7 @@ for a given module instance.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-340">&#182;</a>
               </div>
-              <p>Set up an internal store for sub-modules.</p>
+              <p>サブモジュールを内部に保持します。</p>
 
             </div>
             
@@ -6688,8 +6686,7 @@ for a given module instance.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-341">&#182;</a>
               </div>
-              <p>Set an internal reference to the app
-within a module.</p>
+              <p>モジュール内にアプリケーションへの参照を保持します。</p>
 
             </div>
             
@@ -6704,7 +6701,7 @@ within a module.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-342">&#182;</a>
               </div>
-              <p>By default modules start with their parents.</p>
+              <p>デフォルトでは、親と同時に起動します。</p>
 
             </div>
             
@@ -6719,7 +6716,7 @@ within a module.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-343">&#182;</a>
               </div>
-              <p>Setup a proxy to the trigger method implementation.</p>
+              <p><code>triggerMethod</code>を使います。</p>
 
             </div>
             
@@ -6741,8 +6738,8 @@ Marionette.Module.extend = Marionette.extend;</pre></div></div>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-344">&#182;</a>
               </div>
-              <p>Extend the Module prototype with events / listenTo, so that the module
-can be used as an event aggregator or pub/sub.</p>
+              <p>モジュールのprototypeをBackbone.Eventsで拡張します。
+こうすることでPub/Subオブジェクトとしても使うことができます。</p>
 
             </div>
             
@@ -6757,8 +6754,8 @@ can be used as an event aggregator or pub/sub.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-345">&#182;</a>
               </div>
-              <p>Initialize is an empty function by default. Override it with your own
-initialization logic when extending Marionette.Module.</p>
+              <p><code>initialize</code>はデフォルトでは空のメソッドです。
+モジュールを作る際に実装してください。</p>
 
             </div>
             
@@ -6773,8 +6770,7 @@ initialization logic when extending Marionette.Module.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-346">&#182;</a>
               </div>
-              <p>Initializer for a specific module. Initializers are run when the
-module’s <code>start</code> method is called.</p>
+              <p>モジュールの<code>start</code>メソッドが呼ばれた時に実行されるコールバックを追加します。</p>
 
             </div>
             
@@ -6791,9 +6787,7 @@ module’s <code>start</code> method is called.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-347">&#182;</a>
               </div>
-              <p>Finalizers are run when a module is stopped. They are used to teardown
-and finalize any variables, references, events and other code that the
-module had set up.</p>
+              <p>こちらはモジュールの<code>stop</code>メソッドが呼ばれた時に実行されるコールバックを追加します。</p>
 
             </div>
             
@@ -6810,7 +6804,7 @@ module had set up.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-348">&#182;</a>
               </div>
-              <p>Start the module, and run all of its initializers</p>
+              <p>モジュールを起動し、<code>addInitializer</code>で追加したコールバックを実行します。</p>
 
             </div>
             
@@ -6825,7 +6819,7 @@ module had set up.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-349">&#182;</a>
               </div>
-              <p>Prevent re-starting a module that is already started</p>
+              <p>起動するのは1度きり</p>
 
             </div>
             
@@ -6840,7 +6834,7 @@ module had set up.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-350">&#182;</a>
               </div>
-              <p>start the sub-modules (depth-first hierarchy)</p>
+              <p>サブモジュールも起動</p>
 
             </div>
             
@@ -6855,7 +6849,7 @@ module had set up.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-351">&#182;</a>
               </div>
-              <p>check to see if we should start the sub-module with this parent</p>
+              <p>サブモジュールを親モジュールと同士に起動するかチェック</p>
 
             </div>
             
@@ -6873,7 +6867,7 @@ module had set up.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-352">&#182;</a>
               </div>
-              <p>run the callbacks to “start” the current module</p>
+              <p>“start”イベントに紐づくコールバックを実行</p>
 
             </div>
             
@@ -6894,8 +6888,8 @@ module had set up.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-353">&#182;</a>
               </div>
-              <p>Stop this module by running its finalizers and then stop all of
-the sub-modules for this module</p>
+              <p>モジュールを停止し、<code>addFinalizer</code>で追加したコールバックを実行します。
+このモジュールのサブモジュールも全て停止されます。</p>
 
             </div>
             
@@ -6910,7 +6904,7 @@ the sub-modules for this module</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-354">&#182;</a>
               </div>
-              <p>if we are not initialized, don’t bother finalizing</p>
+              <p>初期化されてないものは無視</p>
 
             </div>
             
@@ -6928,8 +6922,8 @@ the sub-modules for this module</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-355">&#182;</a>
               </div>
-              <p>stop the sub-modules; depth-first, to make sure the
-sub-modules are stopped / finalized before parents</p>
+              <p>階層の深いサブモジュールから停止していきます。
+親モジュールを停止する前に、必ず停止させます。</p>
 
             </div>
             
@@ -6944,7 +6938,7 @@ sub-modules are stopped / finalized before parents</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-356">&#182;</a>
               </div>
-              <p>run the finalizers</p>
+              <p>停止処理を実行</p>
 
             </div>
             
@@ -6959,7 +6953,7 @@ sub-modules are stopped / finalized before parents</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-357">&#182;</a>
               </div>
-              <p>reset the initializers and finalizers</p>
+              <p>初期化/停止時のコールバックをリセット</p>
 
             </div>
             
@@ -6978,8 +6972,8 @@ sub-modules are stopped / finalized before parents</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-358">&#182;</a>
               </div>
-              <p>Configure the module with a definition function and any custom args
-that are to be passed in to the definition function</p>
+              <p>モジュールを定義します。
+引数はすべてモジュールの定義へ渡されます。</p>
 
             </div>
             
@@ -6996,8 +6990,7 @@ that are to be passed in to the definition function</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-359">&#182;</a>
               </div>
-              <p>Internal method: run the module definition function with the correct
-arguments</p>
+              <p>正しい引数でモジュールを定義するための内部メソッドです。</p>
 
             </div>
             
@@ -7012,7 +7005,7 @@ arguments</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-360">&#182;</a>
               </div>
-              <p>If there is no definition short circut the method.</p>
+              <p>定義がないなら返る</p>
 
             </div>
             
@@ -7027,7 +7020,7 @@ arguments</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-361">&#182;</a>
               </div>
-              <p>build the correct list of arguments for the module definition</p>
+              <p>モジュール定義への引数を整理</p>
 
             </div>
             
@@ -7052,9 +7045,8 @@ arguments</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-362">&#182;</a>
               </div>
-              <p>Internal method: set up new copies of initializers and finalizers.
-Calling this method will wipe out all existing initializers and
-finalizers.</p>
+              <p>初期化/停止のコールバックをリセットします。
+これが世なれると、既に追加されていたコールバックは削除されます。</p>
 
             </div>
             
@@ -7062,7 +7054,9 @@ finalizers.</p>
     <span class="hljs-keyword">this</span>._initializerCallbacks = <span class="hljs-keyword">new</span> Marionette.Callbacks();
     <span class="hljs-keyword">this</span>._finalizerCallbacks = <span class="hljs-keyword">new</span> Marionette.Callbacks();
   }
-});</pre></div></div>
+});
+
+_.extend(Marionette.Module, {</pre></div></div>
             
         </li>
         
@@ -7073,11 +7067,12 @@ finalizers.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-363">&#182;</a>
               </div>
-              <p>Type methods to create modules</p>
+              <p>アプリケーションへの引数を親オブジェクトとしてモジュールを作成します。</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>_.extend(Marionette.Module, {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  create: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(app, moduleNames, moduleDefinition)</span>{</span>
+    <span class="hljs-keyword">var</span> module = app;</pre></div></div>
             
         </li>
         
@@ -7088,12 +7083,12 @@ finalizers.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-364">&#182;</a>
               </div>
-              <p>Create a module, hanging off the app parameter as the parent object.</p>
+              <p>引数からモジュール名と定義自体を除きます。</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  create: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(app, moduleNames, moduleDefinition)</span>{</span>
-    <span class="hljs-keyword">var</span> module = app;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> customArgs = slice.call(<span class="hljs-built_in">arguments</span>);
+    customArgs.splice(<span class="hljs-number">0</span>, <span class="hljs-number">3</span>);</pre></div></div>
             
         </li>
         
@@ -7104,13 +7099,13 @@ finalizers.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-365">&#182;</a>
               </div>
-              <p>get the custom args passed in after the module definition and
-get rid of the module name and definition function</p>
+              <p>モジュール名を分割し、サブモジュールの数を取得します。
+<code>Doge.Wow.Amaze</code>の場合、3つのモジュールが存在します。</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> customArgs = slice.call(<span class="hljs-built_in">arguments</span>);
-    customArgs.splice(<span class="hljs-number">0</span>, <span class="hljs-number">3</span>);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    moduleNames = moduleNames.split(<span class="hljs-string">"."</span>);
+    <span class="hljs-keyword">var</span> length = moduleNames.length;</pre></div></div>
             
         </li>
         
@@ -7121,14 +7116,12 @@ get rid of the module name and definition function</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-366">&#182;</a>
               </div>
-              <p>Split the module names and get the number of submodules.
-i.e. an example module name of <code>Doge.Wow.Amaze</code> would
-then have the potential for 3 module definitions.</p>
+              <p>最後のモジュールのために、定義を保持しておきます。</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    moduleNames = moduleNames.split(<span class="hljs-string">"."</span>);
-    <span class="hljs-keyword">var</span> length = moduleNames.length;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> moduleDefinitions = [];
+    moduleDefinitions[length-<span class="hljs-number">1</span>] = moduleDefinition;</pre></div></div>
             
         </li>
         
@@ -7139,23 +7132,7 @@ then have the potential for 3 module definitions.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-367">&#182;</a>
               </div>
-              <p>store the module definition for the last module in the chain</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> moduleDefinitions = [];
-    moduleDefinitions[length-<span class="hljs-number">1</span>] = moduleDefinition;</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-368">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-368">&#182;</a>
-              </div>
-              <p>Loop through all the parts of the module definition</p>
+              <p>モジュール定義をループしていきます。</p>
 
             </div>
             
@@ -7168,13 +7145,13 @@ then have the potential for 3 module definitions.</p>
         </li>
         
         
-        <li id="section-369">
+        <li id="section-368">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-369">&#182;</a>
+                <a class="pilcrow" href="#section-368">&#182;</a>
               </div>
-              <p>Return the last module in the definition chain</p>
+              <p>定義のチェーンの最後のモジュールを返します。</p>
 
             </div>
             
@@ -7188,13 +7165,13 @@ then have the potential for 3 module definitions.</p>
         </li>
         
         
-        <li id="section-370">
+        <li id="section-369">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-370">&#182;</a>
+                <a class="pilcrow" href="#section-369">&#182;</a>
               </div>
-              <p>Get an existing module of this name if we have one</p>
+              <p>定義されていればそのモジュールを取得します。</p>
 
             </div>
             
@@ -7205,13 +7182,13 @@ then have the potential for 3 module definitions.</p>
         </li>
         
         
-        <li id="section-371">
+        <li id="section-370">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-371">&#182;</a>
+                <a class="pilcrow" href="#section-370">&#182;</a>
               </div>
-              <p>Create a new module if we don’t have one</p>
+              <p>定義がない場合は、新たに作成</p>
 
             </div>
             
@@ -7221,13 +7198,13 @@ then have the potential for 3 module definitions.</p>
         </li>
         
         
-        <li id="section-372">
+        <li id="section-371">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-372">&#182;</a>
+                <a class="pilcrow" href="#section-371">&#182;</a>
               </div>
-              <p>store the module on the parent</p>
+              <p>親に保存</p>
 
             </div>
             
@@ -7240,17 +7217,16 @@ then have the potential for 3 module definitions.</p>
         </li>
         
         
-        <li id="section-373">
+        <li id="section-372">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-373">&#182;</a>
+                <a class="pilcrow" href="#section-372">&#182;</a>
               </div>
               <h2 id="module-classes">Module Classes</h2>
-<p>Module classes can be used as an alternative to the define pattern.
-The extend function of a Module is identical to the extend functions
-on other Backbone and Marionette classes.
-This allows module lifecyle events like <code>onStart</code> and <code>onStop</code> to be called directly.</p>
+<p>モジュールクラスを使うことでもモジュールは定義できます。
+モジュールの<code>extend</code>は他のBackboneやMarionetteのクラスと同じです。
+これにより、<code>onStart</code>や<code>onStop</code>といったライフサイクルイベントを使うことができます。</p>
 
             </div>
             
@@ -7264,14 +7240,13 @@ This allows module lifecyle events like <code>onStart</code> and <code>onStop</c
         </li>
         
         
-        <li id="section-374">
+        <li id="section-373">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-374">&#182;</a>
+                <a class="pilcrow" href="#section-373">&#182;</a>
               </div>
-              <p>If all of the module’s functionality is defined inside its class,
-then the class can be passed in directly. <code>MyApp.module(&quot;Foo&quot;, FooModule)</code>.</p>
+              <p>全てのモジュール定義がクラス内にある場合は、そのまま使います。</p>
 
             </div>
             
@@ -7285,15 +7260,15 @@ then the class can be passed in directly. <code>MyApp.module(&quot;Foo&quot;, Fo
         </li>
         
         
-        <li id="section-375">
+        <li id="section-374">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-375">&#182;</a>
+                <a class="pilcrow" href="#section-374">&#182;</a>
               </div>
-              <p>Add the module definition and add a startWithParent initializer function.
-This is complicated because module definitions are heavily overloaded
-and support an anonymous function, module class, or options object</p>
+              <p>モジュール定義を追加し、<code>startWithParent</code>のコールバックを追加します。
+モジュール定義は無名関数やモジュールやオプションなど、
+重度にオーバーロードされることもあるので、複雑な実装になっています。</p>
 
             </div>
             
