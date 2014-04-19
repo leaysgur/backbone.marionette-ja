@@ -2760,7 +2760,7 @@ _.extend(Marionette.Module.prototype, Backbone.Events, {
   },
 
   // 初期化/停止のコールバックをリセットします。
-  // これが世なれると、既に追加されていたコールバックは削除されます。
+  // これが呼ばれると、既に追加されていたコールバックは削除されます。
   _setupInitializersAndFinalizers: function(){
     this._initializerCallbacks = new Marionette.Callbacks();
     this._finalizerCallbacks = new Marionette.Callbacks();
