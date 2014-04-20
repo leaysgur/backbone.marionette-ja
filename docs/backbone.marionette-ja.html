@@ -109,7 +109,7 @@ Distributed under MIT license</p>
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>ChildViewContainerは、子となるビューを格納し、
-取得、削除する親コンテナを提供します。</p>
+取得、削除する親コンテナです。</p>
 
             </div>
             
@@ -472,7 +472,7 @@ Backbone.ChildViewContainer = (<span class="hljs-function"><span class="hljs-key
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
-              <p>コンテナの<code>.length</code>を更新します。</p>
+              <p>コンテナの<code>.length</code>を更新する内部メソッドです。</p>
 
             </div>
             
@@ -1288,7 +1288,8 @@ Wreqr.EventAggregator = (<span class="hljs-function"><span class="hljs-keyword">
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-70">&#182;</a>
               </div>
-              <p>それぞれのメッセージングの実装に対して与えられたハッシュを紐付けします。</p>
+              <p>それぞれのメッセージングの実装に対して、
+与えられたハッシュを紐付けします。</p>
 
             </div>
             
@@ -3024,7 +3025,7 @@ _.extend(Marionette.Region.prototype, Backbone.Events, {</pre></div></div>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-153">&#182;</a>
               </div>
-              <p>管理しているリージョンの数を更新します。</p>
+              <p>管理しているリージョンの数を更新する内部メソッドです。。</p>
 
             </div>
             
@@ -4069,7 +4070,7 @@ underscore.jsのテンプレートを使ってレンダリングするメソッ�
               <p>ビューをレンダリングします。
 デフォルトでは、underscore.jsのテンプレートを使います。
 このメソッドをオーバーライドすることもできますが、
-<code>Marionette.Renderer</code>オブジェクトをオーバーライドするほうが良いです。</p>
+その場合は、<code>Marionette.Renderer</code>オブジェクトをオーバーライドするほうが良いです。</p>
 
             </div>
             
@@ -4103,7 +4104,7 @@ underscore.jsのテンプレートを使ってレンダリングするメソッ�
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-211">&#182;</a>
               </div>
-              <p>close時のイベントをもう少し定義したい場合は、
+              <p>close時のイベントをもう少し定義したい場合などあれば、
 このメソッドをオーバーライドします。</p>
 
             </div>
@@ -4549,7 +4550,7 @@ documentFragmentを使います。</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-233">&#182;</a>
               </div>
-              <p>子ビューのイベントを転送しておく</p>
+              <p>子ビューのイベントをフォワードしておく</p>
 
             </div>
             
@@ -4609,7 +4610,7 @@ documentFragmentを使います。</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-237">&#182;</a>
               </div>
-              <p>既に表示されていれば、”show”mメソッドを実行</p>
+              <p>既に表示されていれば、”show”メソッドを実行</p>
 
             </div>
             
@@ -4661,7 +4662,7 @@ documentFragmentを使います。</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-240">&#182;</a>
               </div>
-              <p>アイテムビューに紐づくイベントを親に転送します。
+              <p>アイテムビューに紐づくイベントを親にフォワードします。
 イベント名の先頭に、”itemview:”を付加します。</p>
 
             </div>
@@ -5393,7 +5394,7 @@ resetイベントの時にはバッファを使うようにします。</p>
 ネストしたレイアウト等を管理するものです。</p>
 <p>特別なビュータイプを持ち、HTMLを用意して自身のリージョンとし、
 そこにリージョンのインスタンスを紐付けていきます。
-コンポジットビューやサブアプリケーションのために使われます。</p>
+コンポジットビューやサブアプリケーションのように使われます。</p>
 
             </div>
             
@@ -5797,11 +5798,7 @@ resetイベントの時にはバッファを使うようにします。</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-298">&#182;</a>
               </div>
-              <p>Borrow Backbones extend implementation
-this allows us to setup a proper
-inheritence pattern that follow in suite
-with the rest of Marionette views.
-Marionetteのビューがビヘイビアを継承できるよう、
+              <p>Marionetteのビューがビヘイビアを継承できるよう、
 Backboneの<code>extend</code>を継承</p>
 
             </div>
@@ -6234,7 +6231,7 @@ Marionette.AppRouter = Backbone.Router.extend({
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-316">&#182;</a>
               </div>
-              <p>該当するイベントをトリガーし、onRouteを発火します。</p>
+              <p>該当するイベントをトリガーし<code>onRoute</code>を発火します。</p>
 
             </div>
             
@@ -6264,7 +6261,7 @@ Marionette.AppRouter = Backbone.Router.extend({
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-318">&#182;</a>
               </div>
-              <p>inRouteがあることを確認し、実行</p>
+              <p><code>onRoute</code>があることを確認し、実行</p>
 
             </div>
             

@@ -30,7 +30,7 @@
 // ---------------------------
 //
 // ChildViewContainerは、子となるビューを格納し、
-// 取得、削除する親コンテナを提供します。
+// 取得、削除する親コンテナです。
 
 Backbone.ChildViewContainer = (function(Backbone, _){
 
@@ -143,7 +143,7 @@ Backbone.ChildViewContainer = (function(Backbone, _){
       });
     },
 
-    // コンテナの`.length`を更新します。
+    // コンテナの`.length`を更新する内部メソッドです。
     _updateLength: function(){
       this.length = _.size(this._views);
     }
@@ -434,7 +434,7 @@ Wreqr.EventAggregator = (function(Backbone, _){
 })(Backbone, _);
 
 // Wreqr.Channel
-// --------------
+// -------------
 //
 // 以下のメッセージングの実装をラップするものです。
 // 実装はEventAggregator, RequestResponse, Commandsの3つです。
@@ -459,7 +459,8 @@ Wreqr.Channel = (function(Wreqr){
       return this;
     },
 
-    // それぞれのメッセージングの実装に対して与えられたハッシュを紐付けします。
+    // それぞれのメッセージングの実装に対して、
+    // 与えられたハッシュを紐付けします。
     connectEvents: function(hash, context) {
       this._connect('vent', hash, context);
       return this;
@@ -1235,7 +1236,7 @@ Marionette.RegionManager = (function(Marionette){
       this.triggerMethod("region:remove", name, region);
     },
 
-    // 管理しているリージョンの数を更新します。
+    // 管理しているリージョンの数を更新する内部メソッドです。。
     _setLength: function(){
       this.length = _.size(this._regions);
     }
@@ -1605,7 +1606,7 @@ Marionette.ItemView = Marionette.View.extend({
   // ビューをレンダリングします。
   // デフォルトでは、underscore.jsのテンプレートを使います。
   // このメソッドをオーバーライドすることもできますが、
-  // `Marionette.Renderer`オブジェクトをオーバーライドするほうが良いです。
+  // その場合は、`Marionette.Renderer`オブジェクトをオーバーライドするほうが良いです。
   render: function(){
     this.isClosed = false;
 
@@ -1627,7 +1628,7 @@ Marionette.ItemView = Marionette.View.extend({
     return this;
   },
 
-  // close時のイベントをもう少し定義したい場合は、
+  // close時のイベントをもう少し定義したい場合などあれば、
   // このメソッドをオーバーライドします。
   close: function(){
     if (this.isClosed){ return; }
@@ -1809,7 +1810,7 @@ Marionette.CollectionView = Marionette.View.extend({
     // 子ビューを作成
     var view = this.buildItemView(item, ItemView, itemViewOptions);
 
-    // 子ビューのイベントを転送しておく
+    // 子ビューのイベントをフォワードしておく
     this.addChildViewEventForwarding(view);
 
     // ビューの追加予告
@@ -1821,7 +1822,7 @@ Marionette.CollectionView = Marionette.View.extend({
     // レンダリングし、表示
     this.renderItemView(view, index);
 
-    // 既に表示されていれば、"show"mメソッドを実行
+    // 既に表示されていれば、"show"メソッドを実行
     if (this._isShown && !this.isBuffering){
       Marionette.triggerMethod.call(view, "show");
     }
@@ -1837,7 +1838,7 @@ Marionette.CollectionView = Marionette.View.extend({
   addChildViewEventForwarding: function(view){
     var prefix = Marionette.getOption(this, "itemViewEventPrefix");
 
-    // アイテムビューに紐づくイベントを親に転送します。
+    // アイテムビューに紐づくイベントを親にフォワードします。
     // イベント名の先頭に、"itemview:"を付加します。
     this.listenTo(view, "all", function(){
       var args = slice.call(arguments);
@@ -2125,7 +2126,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
 //
 // 特別なビュータイプを持ち、HTMLを用意して自身のリージョンとし、
 // そこにリージョンのインスタンスを紐付けていきます。
-// コンポジットビューやサブアプリケーションのために使われます。
+// コンポジットビューやサブアプリケーションのように使われます。
 Marionette.Layout = Marionette.ItemView.extend({
   regionType: Marionette.Region,
 
@@ -2276,10 +2277,6 @@ Marionette.Behavior = (function(_, Backbone){
     triggerMethod: Marionette.triggerMethod
   });
 
-  // Borrow Backbones extend implementation
-  // this allows us to setup a proper
-  // inheritence pattern that follow in suite
-  // with the rest of Marionette views.
   // Marionetteのビューがビヘイビアを継承できるよう、
   // Backboneの`extend`を継承
   Behavior.extend = Marionette.extend;
@@ -2503,12 +2500,12 @@ Marionette.AppRouter = Backbone.Router.extend({
     this._addAppRoute(controller, route, methodName);
   },
 
-  // 該当するイベントをトリガーし、onRouteを発火します。
+  // 該当するイベントをトリガーし`onRoute`を発火します。
   _processOnRoute: function(routeName, routeArgs){
     // 一致するパスを探す
     var routePath = _.invert(this.appRoutes)[routeName];
 
-    // inRouteがあることを確認し、実行
+    // `onRoute`があることを確認し、実行
     if (_.isFunction(this.onRoute)){
       this.onRoute(routeName, routePath, routeArgs);
     }
