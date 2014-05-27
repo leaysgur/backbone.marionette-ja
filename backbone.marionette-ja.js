@@ -2026,7 +2026,7 @@ Marionette.CompositeView = Marionette.CollectionView.extend({
     this.triggerBeforeRender();
     var html = this.renderModel();
     this.$el.html(html);
-    // UIのバインディングはココ行います。
+    // UIのバインディングはココで行います。
     // さもないと、コレクションが全てレンダリングされるまで利用できないからです。
     this.bindUIElements();
     this.triggerMethod("composite:model:rendered");
